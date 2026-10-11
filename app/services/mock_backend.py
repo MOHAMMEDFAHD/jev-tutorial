@@ -54,7 +54,7 @@ _SIM = re.compile(r"\[\[simulate:(\w+)\]\]")
 def _choice_confidence(probabilities: list[float]) -> float:
     """TypeSafe's documented Choice formula: (p_max - 1/n) / (1 - 1/n)."""
     n = len(probabilities)
-    return round((max(probabilities) - 1 / n) / (1 - 1 / n), 4)
+    return round(max(0.0, (max(probabilities) - 1 / n) / (1 - 1 / n)), 4)  # clamp -0.0
 
 
 def _score_confidence(probabilities: list[float]) -> float:

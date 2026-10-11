@@ -12,7 +12,7 @@ pip install -e ".[dev]"
 cp .env.example .env                                    # Windows: Copy-Item .env.example .env
 ```
 Put your key in `.env` (`TYPESAFE_API_KEY=...`).
-✅ `pytest -q` ends with `87 passed, 1 skipped`.
+✅ `pytest -q` ends with `92 passed, 1 skipped`.
 
 ## Lab 1 — First request
 
@@ -54,21 +54,40 @@ python -m evaluation.evaluate
 ```
 ✅ From the threshold sweep, you can name the threshold you would ship and say what it costs in coverage.
 
+## Lab 7 — Business scenarios from the slides
+
+Run `python examples/05_business_patterns.py`. It rebuilds the deck's email, login, invoice and
+feedback scenarios with the real API. For each one, find which parts are computed **in Python**
+(login hour, known country, invoice limit) and which are asked of **Jev**.
+✅ You can explain why "is 2:37 AM unusual?" is answered in code, not by the model.
+
+## Reading
+
+Each lab's background reading is mapped in [learning-resources.md](learning-resources.md).
+Start with **Confidence** and **Known limitations**. The guides on `typesafeai.org` are third-party,
+not TypeSafe's (`typesafe.ai`); prefer the official docs when they disagree.
+
 ---
 
-## Exercise 1 — Add a ticket category (`legal`)
+## Exercise 1 — Add the `shipping` category (slides 11 and 14)
 
-Goal: tickets about contracts, subpoenas or data-protection requests go to a `legal` team.
+The deck's support router sends "My order hasn't arrived yet" to a **shipping** team. Our engine
+doesn't have one yet: today that message lands in `general` or gets held for review. Add it.
 
-1. `app/models/decision.py`: add `LEGAL = "legal"` to `Department`.
-2. `app/services/questions.py`: add a precise `legal` criterion. Edit the others if boundaries overlap
-   (e.g. billing disputes that mention lawyers — which team wins? Write it down).
-3. `app/services/routing_service.py`: add `Department.LEGAL: "legal_queue"`.
-4. Tests: `test_routing.py` parametrize list; `tests/conftest.py` `wire_response()` default probabilities
-   must now include `legal` (the parser requires keys to match *all* options — see why that check matters?).
-5. Add 4–5 labelled `legal` tickets to `evaluation/sample_tickets.json` and re-run the evaluation.
+1. `app/models/decision.py`: add `SHIPPING = "shipping"` to `Department`.
+2. `app/services/questions.py`: add a literal criterion, e.g. *"Order delivery, tracking,
+   delayed or missing packages, wrong or damaged items received."* Then check the boundaries:
+   a **refund for a damaged item** — billing or shipping? Decide, and write the rule into the
+   criteria (Jev reads instructions literally).
+3. `app/services/routing_service.py`: add `Department.SHIPPING: "shipping_queue"`.
+4. Tests: add shipping to the parametrized list in `tests/test_routing.py`. In `tests/conftest.py`,
+   `wire_response()` must now include `shipping` in its default probabilities: the parser requires
+   the keys to match **all** your options. Run `pytest` before fixing it and read the error; that
+   check is what stops a silently half-updated deployment.
+5. Add 4–5 labelled shipping tickets to `evaluation/sample_tickets.json` (include one ambiguous
+   "damaged item, want my money back") and re-run the evaluation.
 
-✅ `pytest` passes; a legal ticket lands in `legal_queue` (or is held, with a reason).
+✅ `pytest` passes; "My order hasn't arrived yet" lands in `shipping_queue`, or is held with a reason.
 
 ## Exercise 2 — Change the confidence policy and observe the effect
 

@@ -10,7 +10,7 @@ from app.models.decision import Department, Priority
 from app.services.decision_parser import DecisionValidationError, parse_ticket_decision
 from tests.conftest import wire_response
 
-ALL_ZERO = {"billing": 0.0, "technical": 0.0, "account": 0.0, "sales": 0.0, "general": 0.0}
+ALL_ZERO = {d.value: 0.0 for d in Department}
 
 
 def parse(body: dict):

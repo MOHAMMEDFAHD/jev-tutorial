@@ -15,6 +15,7 @@ from fastapi.testclient import TestClient
 
 from app.config import Settings
 from app.main import create_app
+from app.models.decision import Department
 from app.services.jev_client import JevClient, build_jev_client
 
 Handler = Callable[[httpx2.Request], httpx2.Response]
@@ -43,14 +44,8 @@ def wire_response(
     model: str = "jev-1.13.0",
 ) -> dict:
     """Build a response body in the documented /v1/systemone wire format."""
-    dept_probs = dept_probs or {
-        "billing": 0.0,
-        "technical": 0.0,
-        "account": 0.0,
-        "sales": 0.0,
-        "general": 0.0,
-        department: 1.0,
-    }
+    # Derived from the enum, so adding a Department doesn't require editing test fixtures.
+    dept_probs = dept_probs or {**{d.value: 0.0 for d in Department}, department: 1.0}
     priority_probs = priority_probs or [0.0, 0.0, 1.0, 0.0]
     return {
         "model": model,

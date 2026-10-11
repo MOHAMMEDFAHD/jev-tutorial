@@ -13,6 +13,7 @@ from app.models.decision import (
 )
 from app.policies.automation_policy import AutomationPolicy, Reason
 from app.services.routing_service import (
+    DEPARTMENT_QUEUES,
     ESCALATION_QUEUE,
     HUMAN_REVIEW_QUEUE,
     route_ticket,
@@ -118,6 +119,11 @@ def test_boundary_value_is_inclusive_for_routing():
 )
 def test_auto_routed_tickets_go_to_department_queue(department, queue):
     assert route_ticket(decision(department=department), Action.AUTO_ROUTE) == queue
+
+
+def test_every_department_has_its_own_queue():
+    """Guard: a new Department without a queue would silently fall back to general_queue."""
+    assert set(DEPARTMENT_QUEUES) == set(Department)
 
 
 def test_review_tickets_never_reach_a_department_queue():

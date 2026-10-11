@@ -6,6 +6,7 @@ import httpx2
 import pytest
 
 from app.config import Settings
+from app.models.decision import Department
 from app.services.jev_client import (
     JevAuthError,
     JevBadRequestError,
@@ -39,13 +40,7 @@ async def test_sends_documented_request_shape():
         "priority": "score",
         "needs_human": "noul",
     }
-    assert set(body["questions"]["department"]["criteria"]) == {
-        "billing",
-        "technical",
-        "account",
-        "sales",
-        "general",
-    }
+    assert set(body["questions"]["department"]["criteria"]) == {d.value for d in Department}
     assert len(body["questions"]["priority"]["criteria"]) == 4
 
 

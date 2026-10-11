@@ -5,10 +5,13 @@ Inspect → Highlight mistakes → Checkpoint**. Times are targets, not limits.
 
 ## Before recording
 
-- [ ] Fresh clone; `pip install -e ".[dev]"`; `pytest` shows `87 passed, 1 skipped`.
+- [ ] Fresh clone; `pip install -e ".[dev]"`; `pytest` shows `92 passed, 1 skipped`.
 - [ ] `.env` has a **real** `TYPESAFE_API_KEY`, `JEV_BACKEND=typesafe`. Use a key you will revoke after recording.
 - [ ] Run `RUN_LIVE_TESTS=1 pytest -m live -s` once to confirm the key works and note the model id it prints.
 - [ ] Delete `tickets.db` so the demo starts empty.
+- [ ] Read [slide-companion.md](slide-companion.md). Decide for each flagged slide (2, 3, 5, 8, 9, 16) whether you'll
+      correct it verbally or with an on-screen overlay. The corrected JSON is in that file.
+- [ ] Run `pytest tests/test_slide_claims.py -v` so you've seen the corrections verified.
 - [ ] Editor font ≥ 16pt; terminal shows no hostname, username, or key. Never `cat .env` on screen.
 - [ ] Recording strategy: the repo is the *finished* code. For each module, either check out the
       file and walk through it, or delete the body and retype the key lines live. The "Write" items
@@ -18,6 +21,25 @@ Inspect → Highlight mistakes → Checkpoint**. Times are targets, not limits.
 `--offline`; they show the *shape* of the output only. Record your on-camera outputs against the real
 API and say the numbers are what Jev returned for you today. Do not read mock numbers as Jev results.
 If live access fails during recording, switch to `--offline` and **say so on camera**.
+
+## Using the slide deck (`jev.pptx`)
+
+The deck's 17 slides are image-only infographics: great for concepts, and not editable. Use them
+for the *why*; switch to the editor and terminal for the *how*. Recommended placement:
+
+| Module | Slides | Cue |
+|---|---|---|
+| 0 | 1, 4–6 | what Jev is; Jev vs. n8n positioning (say: they combine — n8n can call this API) |
+| 1 | 2, 3, 7 | how it works, vs. LLMs, System One. **Correct:** `decision` → `choice` |
+| 2 | 10 | the Python snippet is correct — then run `examples/01` |
+| 3 | 11, 12 | support router, email priority. **Say:** Jev predicts, code routes; priority is a **Score** |
+| 4 | 8, 9 | **Correct:** confidence ≠ top probability (0.72 → 0.58); no `reason_code`/`risk_level` fields |
+| 6 | 16 | **Correct** the request shape |
+| 5, 7 | 17 | business rules → action → measure; **say:** 87% / 60% / 40% are illustrative |
+| 8 | 13–15 | business scenarios → `examples/05_business_patterns.py` |
+
+One sentence to say early and once: *"Percentages on these slides are illustrations, not Jev
+outputs. Every number you see in the terminal is real."*
 
 ---
 
@@ -50,7 +72,7 @@ hard-coded. The `model` field tells you exactly which model version made the cal
 
 ## Module 1 — Jev fundamentals (05:00–12:00)
 
-**Explain** (slides or the docs site, minimal code):
+**Explain** with slides 2, 3, 7 (correct `decision` → `choice` on 2–3), minimal code:
 1. LLMs produce text for people; Jev produces typed decisions for code ("a function call": state in,
    typed probabilistic decisions out).
 2. A request = **state** (string, object or array) + a map of named **questions**. Keys are yours and
@@ -145,6 +167,9 @@ only bridge.
 **Teach a verified fact:** the SDK accepts `NaN`, `inf` or `1.5` as a confidence (we tested 0.7.4);
 type-checking is not range-checking. That's why our parser exists.
 
+**Show slide 8, then correct it on camera:** the slide shows confidence 72% for probabilities
+0.72 / 0.21 / 0.07. Work the formula: (0.72 − 1/3) / (1 − 1/3) = 0.58. Then prove it in code:
+
 **Run.** `python examples/03_probabilities.py`.
 
 **Inspect** for the clear / ambiguous / vague messages: the bar chart, reported confidence vs. the
@@ -223,7 +248,7 @@ the stored message is redacted; probabilities are stored for later audit.
 the real SDK client), not our wrapper — so serialization, parsing, retries and exception types are
 real. Show `wire_response()`.
 
-**Run.** `pytest -q` → `87 passed, 1 skipped`. Open two tests: `test_persistent_rate_limit_raises_after_retry_budget`
+**Run.** `pytest -q` → `92 passed, 1 skipped`. Open two tests: `test_persistent_rate_limit_raises_after_retry_budget`
 (asserts 3 calls) and `test_retrying_same_ticket_does_not_call_jev_twice`.
 
 **Story worth telling:** while building this, `test_api.py` caught a real bug — SQLite dropped the
@@ -246,6 +271,11 @@ written by the same author, so its accuracy is meaningless.
 
 ## Module 8 — Production hardening & recap (68:00–75:00)
 
+**Show slides 13–15, then run** `python examples/05_business_patterns.py`. Point out the pattern
+the slides don't show: the login hour, the country check and the invoice amount limit are computed
+**in Python**, and Jev gets the results as named facts. The actions are chosen by our thresholds,
+including a deliberately low threshold for a cheap step-up check (verification code).
+
 **Tour** (no new big code): `SecretStr` key; env-driven thresholds; JSON logs without message text and
 with `typesafe_sdk` pinned at WARNING (its debug logs include bodies); timeouts + retry budget;
 `/health` that deliberately doesn't call Jev; `/metrics`; PII redaction before Jev and DB; Dockerfile
@@ -257,4 +287,6 @@ version pinning (`JEV_MODEL=jev-1.13.0`) before tuning.
 
 **Recap** in one sentence: *Jev makes the judgment; your code decides what to do with it.*
 
-**Assign** the three exercises and the final challenge (`docs/student-guide.md`).
+**Assign** the three exercises and the final challenge (`docs/student-guide.md`). Exercise 1 adds
+the **shipping** category from slides 11 and 14. Point learners to `docs/learning-resources.md`
+for what to read next, and warn them that `typesafeai.org` is a third-party site, not `typesafe.ai`.
