@@ -154,7 +154,7 @@ app/
   database/               SQLAlchemy model, session, repository (idempotent insert, metrics)
   utils/                  JSON logging, PII redaction
 examples/01–05            progressive, independently runnable scripts
-tests/                    92 tests (real SDK, mocked network) + 1 live test
+tests/                    93 tests (real SDK, mocked network) + 1 live test
 evaluation/               40 labelled synthetic tickets, metrics, evaluate.py
 docs/                     course outline, guides, slide companion, resources, checklist
 ```
@@ -171,7 +171,7 @@ git clone <your-fork-url> practical-jev-ai && cd practical-jev-ai
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 cp .env.example .env        # then set TYPESAFE_API_KEY=… (or JEV_BACKEND=mock)
-pytest -q                   # 92 passed, 1 skipped
+pytest -q                   # 93 passed, 1 skipped
 ```
 
 **Windows (PowerShell)**
@@ -233,7 +233,7 @@ Response from a run against the **offline mock** (note `"model": "mock-offline"`
 ## Run the tests
 
 ```bash
-pytest -q                                   # 92 tests, no network needed
+pytest -q                                   # 93 tests, no network needed
 pytest tests/test_slide_claims.py -v        # the slide-deck corrections, verified
 RUN_LIVE_TESTS=1 pytest -m live -s          # 1 contract test against the real API (needs a key)
 ruff format --check . && ruff check .

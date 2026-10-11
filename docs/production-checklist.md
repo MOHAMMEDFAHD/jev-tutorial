@@ -31,6 +31,8 @@ Legend: ✅ implemented and tested · ◐ partially implemented · ❌ not imple
 | Sufficient evaluation data | ❌ | 40 synthetic tickets is a teaching set, not a validation set |
 | Drift monitoring | ◐ | `/metrics` shows review rate & reviewer agreement; no alerting or time windows |
 | Option-order bias check | ❌ | jev-1.13 can favour the first Choice option; evaluate with shuffled orders |
+| Business impact (response time, manual work saved) | ❌ | slide 17 shows "60% faster / 40% less manual work" as **illustrative** targets. This repo measures accuracy, automation coverage and reviewer agreement only. Measure time-to-first-response and handling time against a baseline before claiming savings |
+| Accuracy claims | ◐ | only measured on 40 synthetic tickets; any headline accuracy (e.g. slide 17's 87%) must come from your own labelled data via `evaluation/evaluate.py` |
 
 ## API & data
 
@@ -43,6 +45,7 @@ Legend: ✅ implemented and tested · ◐ partially implemented · ❌ not imple
 | Request rate limiting on our API | ❌ | add at gateway or middleware |
 | Database | ◐ | SQLite, single worker. Use Postgres + Alembic migrations for real traffic |
 | Downstream actions (ticketing system, notifications) | ❌ | routing is *recorded*, not executed. Use a transactional outbox so actions fire exactly once |
+| n8n / workflow-tool integration | ◐ | documented in `docs/n8n-integration.md`; **not tested** with a running n8n. Requires API authentication before any non-local use |
 | Re-processing failed inferences | ❌ | `inference_failed` tickets wait for humans; add a retry job if wanted |
 | Pagination | ◐ | limit/offset; switch to cursor pagination for large tables |
 
@@ -67,4 +70,6 @@ Legend: ✅ implemented and tested · ◐ partially implemented · ❌ not imple
 | Structured logs with request ids | ✅ | `X-Request-ID` + TypeSafe `jev_request_id` for support tickets |
 | Alerting | ❌ | alert on error rate, review-rate spikes, p95 latency |
 | CI pipeline | ❌ | run `ruff` + `pytest` on every push |
+| Documentation accuracy vs. slide deck | ✅ | five deck simplifications corrected in `docs/slide-companion.md`, each pinned by `tests/test_slide_claims.py` |
+| External learning links | ◐ | 41/42 official links matched the official index on 2026-10-11; `cookbooks/basic_memory` not found; 6 third-party links (typesafeai.org) unverified. Re-check periodically |
 | Load test | ❌ | not performed |

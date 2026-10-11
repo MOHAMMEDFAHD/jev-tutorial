@@ -5,7 +5,7 @@ Inspect → Highlight mistakes → Checkpoint**. Times are targets, not limits.
 
 ## Before recording
 
-- [ ] Fresh clone; `pip install -e ".[dev]"`; `pytest` shows `92 passed, 1 skipped`.
+- [ ] Fresh clone; `pip install -e ".[dev]"`; `pytest` shows `93 passed, 1 skipped`.
 - [ ] `.env` has a **real** `TYPESAFE_API_KEY`, `JEV_BACKEND=typesafe`. Use a key you will revoke after recording.
 - [ ] Run `RUN_LIVE_TESTS=1 pytest -m live -s` once to confirm the key works and note the model id it prints.
 - [ ] Delete `tickets.db` so the demo starts empty.
@@ -248,7 +248,7 @@ the stored message is redacted; probabilities are stored for later audit.
 the real SDK client), not our wrapper — so serialization, parsing, retries and exception types are
 real. Show `wire_response()`.
 
-**Run.** `pytest -q` → `92 passed, 1 skipped`. Open two tests: `test_persistent_rate_limit_raises_after_retry_budget`
+**Run.** `pytest -q` → `93 passed, 1 skipped`. Open two tests: `test_persistent_rate_limit_raises_after_retry_budget`
 (asserts 3 calls) and `test_retrying_same_ticket_does_not_call_jev_twice`.
 
 **Story worth telling:** while building this, `test_api.py` caught a real bug — SQLite dropped the

@@ -12,7 +12,7 @@ pip install -e ".[dev]"
 cp .env.example .env                                    # Windows: Copy-Item .env.example .env
 ```
 Put your key in `.env` (`TYPESAFE_API_KEY=...`).
-✅ `pytest -q` ends with `92 passed, 1 skipped`.
+✅ `pytest -q` ends with `93 passed, 1 skipped`.
 
 ## Lab 1 — First request
 
@@ -80,14 +80,16 @@ doesn't have one yet: today that message lands in `general` or gets held for rev
    a **refund for a damaged item** — billing or shipping? Decide, and write the rule into the
    criteria (Jev reads instructions literally).
 3. `app/services/routing_service.py`: add `Department.SHIPPING: "shipping_queue"`.
-4. Tests: add shipping to the parametrized list in `tests/test_routing.py`. In `tests/conftest.py`,
-   `wire_response()` must now include `shipping` in its default probabilities: the parser requires
-   the keys to match **all** your options. Run `pytest` before fixing it and read the error; that
-   check is what stops a silently half-updated deployment.
+4. Run `pytest` **before** step 3, then after it. Before: exactly one failure,
+   `test_every_department_has_its_own_queue`. That guard exists because a department with no
+   queue would otherwise fall back to `general_queue` silently. After step 3: all green. The other
+   tests read the departments from the `Department` enum, so they need no edits. Optionally add
+   `(Department.SHIPPING, "shipping_queue")` to the parametrized list in `tests/test_routing.py`.
 5. Add 4–5 labelled shipping tickets to `evaluation/sample_tickets.json` (include one ambiguous
    "damaged item, want my money back") and re-run the evaluation.
 
-✅ `pytest` passes; "My order hasn't arrived yet" lands in `shipping_queue`, or is held with a reason.
+✅ `pytest` passes; with a real key, "My order hasn't arrived yet" lands in `shipping_queue` or is held
+with a reason. (With `--offline` it is held: the keyword mock knows nothing about shipping. That's expected.)
 
 ## Exercise 2 — Change the confidence policy and observe the effect
 
@@ -115,6 +117,11 @@ Add **customer sentiment** (Score: `calm`, `frustrated`, `angry`).
 4. `database/models.py`: a `sentiment` column. (Delete `tickets.db` — there are no migrations.)
 5. `repository.py`, `models/ticket.py` (`TicketResponse.sentiment`), `api/routes.py` (`to_response`).
 6. Optional policy rule: angry **and** high priority → human review. Add a test.
+7. Tests: run `pytest` after step 3 and read the failures before fixing them (expect ~17, across the
+   API and parser tests). API tickets now come back `decision_validation_failed`, because `wire_response()` in `tests/conftest.py` doesn't include a
+   `sentiment` answer and the parser refuses an incomplete response. That's the behaviour you want in
+   production. Add a `sentiment` Score answer to `wire_response()`, and add `"sentiment": "score"` to
+   the expected question types in `test_sends_documented_request_shape`.
 
 ✅ `POST /tickets` returns `sentiment`; tests pass.
 
