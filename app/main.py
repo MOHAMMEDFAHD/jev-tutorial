@@ -41,9 +41,9 @@ def create_app(settings: Settings | None = None, jev_client: JevClient | None = 
         app.state.engine = engine
         app.state.repository = TicketRepository(make_session_factory(engine))
         app.state.decision_service = DecisionService(jev, AutomationPolicy.from_settings(settings))
+        model = settings.jev_model if jev.backend_name == "typesafe" else "mock-offline"
         logger.info(
-            "startup",
-            extra={"fields": {"jev_backend": jev.backend_name, "jev_model": settings.jev_model}},
+            "startup", extra={"fields": {"jev_backend": jev.backend_name, "jev_model": model}}
         )
         if jev.backend_name == "mock":
             logger.warning("OFFLINE MOCK BACKEND: decisions are NOT produced by Jev")
