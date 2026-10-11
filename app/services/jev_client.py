@@ -50,11 +50,11 @@ class JevError(Exception):
 
 
 class JevAuthError(JevError):
-    reason = "jev_auth_failed"          # bad/missing key: a configuration problem
+    reason = "jev_auth_failed"  # bad/missing key: a configuration problem
 
 
 class JevRateLimitError(JevError):
-    reason = "jev_rate_limited"         # still 429 after the SDK's retries
+    reason = "jev_rate_limited"  # still 429 after the SDK's retries
 
 
 class JevTimeoutError(JevError):
@@ -62,15 +62,15 @@ class JevTimeoutError(JevError):
 
 
 class JevUnavailableError(JevError):
-    reason = "jev_unavailable"          # connection failure or 5xx after retries
+    reason = "jev_unavailable"  # connection failure or 5xx after retries
 
 
 class JevBadRequestError(JevError):
-    reason = "jev_bad_request"          # 400/422: our question payload is wrong
+    reason = "jev_bad_request"  # 400/422: our question payload is wrong
 
 
 class JevResponseError(JevError):
-    reason = "jev_invalid_response"     # response missing/invalid fields
+    reason = "jev_invalid_response"  # response missing/invalid fields
 
 
 @dataclass(frozen=True)
@@ -95,7 +95,9 @@ class JevClient:
             )
         # Order matters: subclasses before their parents.
         except TypeSafeAPIResponseValidationError as exc:
-            raise JevResponseError(f"invalid field: {exc.field_path}", request_id=exc.request_id) from exc
+            raise JevResponseError(
+                f"invalid field: {exc.field_path}", request_id=exc.request_id
+            ) from exc
         except (TypeSafeAuthenticationError, TypeSafePermissionDeniedError) as exc:
             raise JevAuthError(f"HTTP {exc.status}", request_id=exc.request_id) from exc
         except TypeSafeRateLimitError as exc:

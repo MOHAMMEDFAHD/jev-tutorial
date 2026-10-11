@@ -11,10 +11,10 @@ ID_PATTERN = r"^[A-Za-z0-9_-]{1,64}$"
 
 
 class TicketStatus(StrEnum):
-    ROUTED = "routed"                    # auto-routed by policy
-    PENDING_REVIEW = "pending_review"    # held for a human by policy
+    ROUTED = "routed"  # auto-routed by policy
+    PENDING_REVIEW = "pending_review"  # held for a human by policy
     INFERENCE_FAILED = "inference_failed"  # Jev unavailable/invalid -> held for a human
-    REVIEWED = "reviewed"                # a human has signed off
+    REVIEWED = "reviewed"  # a human has signed off
 
 
 class TicketCreate(BaseModel):
@@ -63,8 +63,8 @@ class ReviewRequest(BaseModel):
 class MetricsResponse(BaseModel):
     total_tickets: int
     by_status: dict[str, int]
-    automation_coverage: float   # share of tickets auto-routed
-    review_rate: float           # share held for humans (incl. inference failures)
+    automation_coverage: float  # share of tickets auto-routed
+    review_rate: float  # share held for humans (incl. inference failures)
     inference_error_rate: float
     reviewed_tickets: int
     reviewer_agreement: float | None  # share of reviews where human kept model's department

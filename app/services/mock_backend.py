@@ -31,8 +31,18 @@ MOCK_API_KEY = "mock-offline-key"
 _KEYWORDS: dict[str, list[str]] = {
     "billing": ["charge", "charged", "refund", "invoice", "payment", "billing", "card", "receipt"],
     "technical": ["error", "bug", "crash", "down", "outage", "api", "integration", "slow", "500"],
-    "account": ["password", "login", "log in", "locked", "2fa", "two-factor", "hacked", "cancel",
-                "email address", "account"],
+    "account": [
+        "password",
+        "login",
+        "log in",
+        "locked",
+        "2fa",
+        "two-factor",
+        "hacked",
+        "cancel",
+        "email address",
+        "account",
+    ],
     "sales": ["pricing", "price", "quote", "upgrade", "enterprise", "plan", "seats", "demo"],
 }
 _URGENT = ["asap", "urgent", "immediately", "blocked", "losing", "today", "cannot", "can't"]
@@ -67,13 +77,19 @@ def _department_answer(text: str, options: list[str]) -> dict:
     total = sum(weights.values())
     probs = {k: round(v / total, 4) for k, v in weights.items()}
     choice = max(probs, key=probs.get)
-    return {"type": "choice", "choice": choice, "probabilities": probs,
-            "confidence": _choice_confidence(list(probs.values()))}
+    return {
+        "type": "choice",
+        "choice": choice,
+        "probabilities": probs,
+        "confidence": _choice_confidence(list(probs.values())),
+    }
 
 
 def _priority_answer(text: str, legend: list) -> dict:
     n = len(legend)
-    level = min(n - 1, 1 + (1 if _hits(text, _URGENT) else 0) + (1 if _hits(text, _CRITICAL) else 0))
+    level = min(
+        n - 1, 1 + (1 if _hits(text, _URGENT) else 0) + (1 if _hits(text, _CRITICAL) else 0)
+    )
     if level == 1 and _hits(text, ["question", "wondering", "curious", "how do i"]):
         level = 0
     probs = [0.04] * n
@@ -103,9 +119,19 @@ def _answer(question: dict, text: str) -> dict:
 def handle_request(request: httpx2.Request) -> httpx2.Response:
     headers = {"x-typesafe-request-id": "mock-request"}
     if request.url.path.endswith("/v1/models"):
-        return httpx2.Response(200, headers=headers, json={"models": [
-            {"name": MOCK_MODEL_ID, "description": "Offline keyword mock (not Jev)",
-             "release_date": "2026-01-01"}]})
+        return httpx2.Response(
+            200,
+            headers=headers,
+            json={
+                "models": [
+                    {
+                        "name": MOCK_MODEL_ID,
+                        "description": "Offline keyword mock (not Jev)",
+                        "release_date": "2026-01-01",
+                    }
+                ]
+            },
+        )
 
     body = json.loads(request.content)
     text = json.dumps(body["state"]).lower()
@@ -118,15 +144,26 @@ def handle_request(request: httpx2.Request) -> httpx2.Response:
         if mode in {"429", "500", "401"}:
             return httpx2.Response(int(mode), headers=headers, json={"detail": f"simulated {mode}"})
         if mode == "malformed":
-            return httpx2.Response(200, headers=headers, json={
-                "model": MOCK_MODEL_ID, "usage": {}, "answers": {"department": {"type": "choice"}}})
+            return httpx2.Response(
+                200,
+                headers=headers,
+                json={
+                    "model": MOCK_MODEL_ID,
+                    "usage": {},
+                    "answers": {"department": {"type": "choice"}},
+                },
+            )
 
     answers = {key: _answer(q, text) for key, q in body["questions"].items()}
-    return httpx2.Response(200, headers=headers, json={
-        "model": MOCK_MODEL_ID,
-        "answers": answers,
-        "usage": {"input_tokens": len(text) // 4, "output_tokens": 0},
-    })
+    return httpx2.Response(
+        200,
+        headers=headers,
+        json={
+            "model": MOCK_MODEL_ID,
+            "answers": answers,
+            "usage": {"input_tokens": len(text) // 4, "output_tokens": 0},
+        },
+    )
 
 
 def mock_transport() -> httpx2.MockTransport:

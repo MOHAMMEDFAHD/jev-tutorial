@@ -45,18 +45,18 @@ class DepartmentDecision(_Frozen):
     """Decision A: which team handles the ticket (Jev Choice)."""
 
     department: Department
-    confidence: float = Field(ge=0, le=1)      # returned by Jev
-    probabilities: dict[Department, float]     # returned by Jev
-    top2_margin: float = Field(ge=0, le=1)     # computed by us: p(top) - p(runner-up)
+    confidence: float = Field(ge=0, le=1)  # returned by Jev
+    probabilities: dict[Department, float]  # returned by Jev
+    top2_margin: float = Field(ge=0, le=1)  # computed by us: p(top) - p(runner-up)
 
 
 class PriorityDecision(_Frozen):
     """Decision B: how urgent the ticket is (Jev Score over 4 ordered levels)."""
 
-    priority: Priority                         # most likely level (argmax), computed by us
+    priority: Priority  # most likely level (argmax), computed by us
     expected_score: float = Field(ge=0, le=3)  # Jev's probability-weighted score
-    confidence: float = Field(ge=0, le=1)      # returned by Jev
-    probabilities: dict[Priority, float]       # returned by Jev (re-keyed by us)
+    confidence: float = Field(ge=0, le=1)  # returned by Jev
+    probabilities: dict[Priority, float]  # returned by Jev (re-keyed by us)
 
 
 class HumanReviewSignal(_Frozen):
@@ -71,7 +71,7 @@ class TicketDecision(_Frozen):
     department: DepartmentDecision
     priority: PriorityDecision
     human_review: HumanReviewSignal
-    model: str                  # versioned model id reported by the API, e.g. "jev-1.13.0"
+    model: str  # versioned model id reported by the API, e.g. "jev-1.13.0"
     request_id: str | None = None
     input_tokens: int | None = None
 
@@ -81,4 +81,4 @@ class PolicyOutcome(_Frozen):
 
     action: Action
     queue: str
-    reasons: list[str]          # every rule that fired, for audit and for reviewers
+    reasons: list[str]  # every rule that fired, for audit and for reviewers

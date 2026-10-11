@@ -41,8 +41,10 @@ def create_app(settings: Settings | None = None, jev_client: JevClient | None = 
         app.state.engine = engine
         app.state.repository = TicketRepository(make_session_factory(engine))
         app.state.decision_service = DecisionService(jev, AutomationPolicy.from_settings(settings))
-        logger.info("startup", extra={"fields": {
-            "jev_backend": jev.backend_name, "jev_model": settings.jev_model}})
+        logger.info(
+            "startup",
+            extra={"fields": {"jev_backend": jev.backend_name, "jev_model": settings.jev_model}},
+        )
         if jev.backend_name == "mock":
             logger.warning("OFFLINE MOCK BACKEND: decisions are NOT produced by Jev")
         yield
@@ -64,10 +66,18 @@ def create_app(settings: Settings | None = None, jev_client: JevClient | None = 
         started = time.perf_counter()
         response = await call_next(request)
         response.headers["X-Request-ID"] = request_id
-        logger.info("http_request", extra={"fields": {
-            "request_id": request_id, "method": request.method, "path": request.url.path,
-            "status": response.status_code,
-            "duration_ms": round((time.perf_counter() - started) * 1000, 1)}})
+        logger.info(
+            "http_request",
+            extra={
+                "fields": {
+                    "request_id": request_id,
+                    "method": request.method,
+                    "path": request.url.path,
+                    "status": response.status_code,
+                    "duration_ms": round((time.perf_counter() - started) * 1000, 1),
+                }
+            },
+        )
         return response
 
     @app.exception_handler(SQLAlchemyError)

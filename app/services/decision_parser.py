@@ -58,7 +58,9 @@ def _get(response: SystemOneResponse, key: str, kind: type):
     if answer is None:
         raise DecisionValidationError(f"missing answer for question '{key}'")
     if not isinstance(answer, kind):
-        raise DecisionValidationError(f"'{key}' is {type(answer).__name__}, expected {kind.__name__}")
+        raise DecisionValidationError(
+            f"'{key}' is {type(answer).__name__}, expected {kind.__name__}"
+        )
     return answer
 
 

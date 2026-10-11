@@ -46,9 +46,17 @@ class DecisionService:
             decision = parse_ticket_decision(result.response)
         except JevError as exc:
             log = logger.error if isinstance(exc, JevAuthError) else logger.warning
-            log("jev_inference_failed", extra={"fields": {
-                "ticket_id": ticket_id, "reason": exc.reason, "detail": str(exc),
-                "jev_request_id": exc.request_id}})
+            log(
+                "jev_inference_failed",
+                extra={
+                    "fields": {
+                        "ticket_id": ticket_id,
+                        "reason": exc.reason,
+                        "detail": str(exc),
+                        "jev_request_id": exc.request_id,
+                    }
+                },
+            )
             return ProcessingResult(
                 decision=None,
                 action=Action.HUMAN_REVIEW,
@@ -61,20 +69,31 @@ class DecisionService:
 
         action, reasons = self.policy.evaluate(decision)
         queue = route_ticket(decision, action)
-        logger.info("ticket_decided", extra={"fields": {
-            "ticket_id": ticket_id,
-            "department": decision.department.department,
-            "department_confidence": decision.department.confidence,
-            "priority": decision.priority.priority,
-            "human_review_p": decision.human_review.probability,
-            "action": action, "queue": queue, "reasons": reasons,
-            "model": decision.model, "jev_request_id": decision.request_id,
-            "latency_ms": round(result.latency_ms, 1)}})
+        logger.info(
+            "ticket_decided",
+            extra={
+                "fields": {
+                    "ticket_id": ticket_id,
+                    "department": decision.department.department,
+                    "department_confidence": decision.department.confidence,
+                    "priority": decision.priority.priority,
+                    "human_review_p": decision.human_review.probability,
+                    "action": action,
+                    "queue": queue,
+                    "reasons": reasons,
+                    "model": decision.model,
+                    "jev_request_id": decision.request_id,
+                    "latency_ms": round(result.latency_ms, 1),
+                }
+            },
+        )
         return ProcessingResult(
             decision=decision,
             action=action,
             queue=queue,
             reasons=reasons,
-            status=TicketStatus.ROUTED if action is Action.AUTO_ROUTE else TicketStatus.PENDING_REVIEW,
+            status=TicketStatus.ROUTED
+            if action is Action.AUTO_ROUTE
+            else TicketStatus.PENDING_REVIEW,
             latency_ms=result.latency_ms,
         )

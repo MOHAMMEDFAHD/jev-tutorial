@@ -16,7 +16,7 @@ DEPARTMENT_QUEUES: dict[Department, str] = {
 }
 FALLBACK_QUEUE = "general_queue"
 HUMAN_REVIEW_QUEUE = "human_review_queue"
-ESCALATION_QUEUE = "escalation_queue"   # reviewed by a senior agent first
+ESCALATION_QUEUE = "escalation_queue"  # reviewed by a senior agent first
 
 
 def route_ticket(decision: TicketDecision | None, action: Action) -> str:

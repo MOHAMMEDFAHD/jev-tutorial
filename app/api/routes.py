@@ -58,12 +58,15 @@ def to_response(record: TicketRecord) -> TicketResponse:
         created_at=record.created_at,
         review_outcome=(
             f"{record.final_department}/{record.final_priority} by {record.reviewer}"
-            if record.reviewed_at else None
+            if record.reviewed_at
+            else None
         ),
     )
 
 
-def _replay_or_conflict(record: TicketRecord, fingerprint: str, response: Response) -> TicketResponse:
+def _replay_or_conflict(
+    record: TicketRecord, fingerprint: str, response: Response
+) -> TicketResponse:
     """Same ticket_id + same content = safe client retry: return the stored result, do
     NOT re-run the model or re-route. Same id + different content = client bug: 409."""
     if record.content_sha256 != fingerprint:
@@ -80,12 +83,17 @@ def _replay_or_conflict(record: TicketRecord, fingerprint: str, response: Respon
     "/tickets",
     response_model=TicketResponse,
     status_code=status.HTTP_201_CREATED,
-    responses={200: {"description": "Idempotent replay of an existing ticket"},
-               409: {"description": "ticket_id reused with different content"}},
+    responses={
+        200: {"description": "Idempotent replay of an existing ticket"},
+        409: {"description": "ticket_id reused with different content"},
+    },
 )
 async def create_ticket(
-    ticket: TicketCreate, response: Response, settings: SettingsDep,
-    repo: RepoDep, service: ServiceDep,
+    ticket: TicketCreate,
+    response: Response,
+    settings: SettingsDep,
+    repo: RepoDep,
+    service: ServiceDep,
 ) -> TicketResponse:
     if len(ticket.message) > settings.max_message_chars:
         raise HTTPException(
@@ -151,6 +159,7 @@ async def health(request: Request, settings: SettingsDep) -> dict:
     """Liveness + readiness of local dependencies. Deliberately does NOT call Jev: a health
     check that spends API quota and fails when TypeSafe blips would cause restart loops,
     and the app degrades gracefully without Jev anyway."""
+
     def ping() -> None:
         with request.app.state.engine.connect() as conn:
             conn.execute(text("SELECT 1"))

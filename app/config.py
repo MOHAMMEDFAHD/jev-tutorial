@@ -23,8 +23,8 @@ class Settings(BaseSettings):
     typesafe_api_key: SecretStr | None = None
     # Pin a version (e.g. "jev-1.13.0") once your thresholds are tuned; aliases can move.
     jev_model: str = "jev-latest"
-    jev_timeout_seconds: float = Field(default=5.0, gt=0)      # per HTTP attempt
-    jev_max_retries: int = Field(default=2, ge=0, le=5)       # SDK retries (429/5xx/timeouts)
+    jev_timeout_seconds: float = Field(default=5.0, gt=0)  # per HTTP attempt
+    jev_max_retries: int = Field(default=2, ge=0, le=5)  # SDK retries (429/5xx/timeouts)
     jev_retry_budget_seconds: float = Field(default=10.0, gt=0)  # total time incl. backoff
 
     # --- Automation policy (application-level, tune with evaluation data) -----------
