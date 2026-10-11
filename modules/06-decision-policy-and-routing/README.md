@@ -4,7 +4,7 @@
 
 **Goal:** decide *whether to act* on a prediction, with configurable business rules and a human in the loop.
 
-**Slides:** page 17 (steps 4–5) of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf): high confidence → auto, uncertain
+**Slides:** page 31 (steps 4–5) of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf): high confidence → auto, uncertain
 → review, sensitive → mandatory approval. That's exactly this module. Its percentages are illustrative.
 
 ## Build

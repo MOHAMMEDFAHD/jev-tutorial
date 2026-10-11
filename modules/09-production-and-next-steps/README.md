@@ -4,8 +4,8 @@
 
 **Goal:** see what makes this production-oriented, what's still missing, and apply the pattern on your own.
 
-**Slides:** pages 13–15 of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf): suspicious logins, complaints,
-invoices, feedback. (Page 12, email priority, was introduced in Module 4; example 05 revisits it.)
+**Slides:** pages 27–29 of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf): suspicious logins, complaints,
+invoices, feedback. (Page 26, email priority, was introduced in Module 4; example 05 revisits it.)
 
 ## Business scenarios, built correctly
 
@@ -39,7 +39,7 @@ own data, and pinning `JEV_MODEL=jev-1.13.0`.
 ## Exercises
 
 From [docs/student-guide.md](../../docs/student-guide.md):
-1. **Add the `shipping` category** (slides 11, 14).
+1. **Add the `shipping` category** (slides 25, 28).
 2. **Change the confidence policy** and compare coverage vs. accuracy.
 3. **Add a sentiment question** and expose it through the API.
 

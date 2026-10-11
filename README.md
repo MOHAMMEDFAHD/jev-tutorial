@@ -100,7 +100,7 @@ Three facts that trip people up:
    is unusually high"? Compute it in Python and pass the result as a fact. Jev is weak at arithmetic,
    counting and date comparison ([known limitations](https://docs.typesafe.ai/model-jaggedness/jev-1.13)).
 
-> Using the course slide deck? Slides 2, 3, 5, 8, 9 and 16 simplify these points.
+> Using the course slide deck? Slides 16, 17, 19, 22, 23 and 30 simplify these points.
 > [docs/slide-companion.md](docs/slide-companion.md) lists each correction, and
 > `tests/test_slide_claims.py` verifies them against the real SDK.
 
@@ -136,7 +136,7 @@ to a human, with the reason recorded.
 
 ### From business idea to working system
 
-The deck's "how a business owner can get started" steps (slides 16–17), mapped to this repo:
+The deck's "how a business owner can get started" steps (slides 30–31), mapped to this repo:
 
 | Step | What it means | Where it lives here |
 |---|---|---|

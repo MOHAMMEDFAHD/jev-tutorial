@@ -4,7 +4,7 @@
 
 **Goal:** prove the pipeline works, including when things fail, and measure decision quality with data.
 
-**Slides:** page 17 (step 6, "measure the results") of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf). Its 87% / 60% / 40%
+**Slides:** page 31 (step 6, "measure the results") of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf). Its 87% / 60% / 40%
 are illustrative targets — here you measure real numbers.
 
 ## Testing

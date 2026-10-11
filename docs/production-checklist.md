@@ -31,8 +31,8 @@ Legend: ✅ implemented and tested · ◐ partially implemented · ❌ not imple
 | Sufficient evaluation data | ❌ | 40 synthetic tickets is a teaching set, not a validation set |
 | Drift monitoring | ◐ | `/metrics` shows review rate & reviewer agreement; no alerting or time windows |
 | Option-order bias check | ❌ | jev-1.13 can favour the first Choice option; evaluate with shuffled orders |
-| Business impact (response time, manual work saved) | ❌ | slide 17 shows "60% faster / 40% less manual work" as **illustrative** targets. This repo measures accuracy, automation coverage and reviewer agreement only. Measure time-to-first-response and handling time against a baseline before claiming savings |
-| Accuracy claims | ◐ | only measured on 40 synthetic tickets; any headline accuracy (e.g. slide 17's 87%) must come from your own labelled data via `evaluation/evaluate.py` |
+| Business impact (response time, manual work saved) | ❌ | slide 31 shows "60% faster / 40% less manual work" as **illustrative** targets. This repo measures accuracy, automation coverage and reviewer agreement only. Measure time-to-first-response and handling time against a baseline before claiming savings |
+| Accuracy claims | ◐ | only measured on 40 synthetic tickets; any headline accuracy (e.g. slide 31's 87%) must come from your own labelled data via `evaluation/evaluate.py` |
 
 ## API & data
 

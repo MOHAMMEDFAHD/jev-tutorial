@@ -4,7 +4,7 @@
 
 **Goal:** a working environment and one real, authenticated Jev response on your screen.
 
-**Slides:** page 10 of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf). Its Python code is correct; you'll run the same idea.
+**Slides:** page 24 of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf). Its Python code is correct; you'll run the same idea.
 
 ## Set up
 

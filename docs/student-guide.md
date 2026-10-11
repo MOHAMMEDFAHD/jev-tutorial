@@ -69,7 +69,7 @@ not TypeSafe's (`typesafe.ai`); prefer the official docs when they disagree.
 
 ---
 
-## Exercise 1 — Add the `shipping` category (slides 11 and 14)
+## Exercise 1 — Add the `shipping` category (slides 25 and 28)
 
 The deck's support router sends "My order hasn't arrived yet" to a **shipping** team. Our engine
 doesn't have one yet: today that message lands in `general` or gets held for review. Add it.

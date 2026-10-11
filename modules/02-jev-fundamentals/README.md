@@ -4,7 +4,7 @@
 
 **Goal:** understand what Jev is, what it returns, and what it's bad at — before writing code.
 
-**Slides:** pages 2, 3, 7 of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf). On slides 2–3, the output field is
+**Slides:** pages 16, 17, 21 of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf). On slides 16–17, the output field is
 `choice`, not `"decision"`.
 
 ## Concepts

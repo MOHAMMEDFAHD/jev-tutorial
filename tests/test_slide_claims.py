@@ -18,8 +18,8 @@ def choice_confidence(probabilities: list[float]) -> float:
     return (max(probabilities) - 1 / n) / (1 - 1 / n)
 
 
-def test_slide10_python_snippet_runs_against_the_real_sdk():
-    """Slide 10's code, verbatim except for the offline transport, is valid SDK usage."""
+def test_slide24_python_snippet_runs_against_the_real_sdk():
+    """Slide 24's code, verbatim except for the offline transport, is valid SDK usage."""
     with TypeSafeClient(api_key=MOCK_API_KEY, transport=mock_transport()) as client:
         result = client.system_one(
             state="My order has not arrived",
@@ -33,19 +33,19 @@ def test_slide10_python_snippet_runs_against_the_real_sdk():
     assert result.choices["route"].choice in {"shipping", "billing"}
 
 
-def test_slides_8_and_9_confidence_is_not_the_top_probability():
-    """Slides 8-9 show fraud 0.72 / legit 0.21 / review 0.07 with 'confidence 0.72'.
+def test_slides_22_and_23_confidence_is_not_the_top_probability():
+    """Slides 22-23 show fraud 0.72 / legit 0.21 / review 0.07 with 'confidence 0.72'.
     Under TypeSafe's formula that distribution has confidence ~0.58."""
     assert choice_confidence([0.72, 0.21, 0.07]) == pytest.approx(0.58)
 
 
-def test_slide11_two_option_vs_three_option_confidence():
+def test_slide25_two_option_vs_three_option_confidence():
     """Confidence depends on the number of options: 0.92 top probability among 3 options."""
     assert choice_confidence([0.92, 0.06, 0.02]) == pytest.approx(0.88)
 
 
-def test_real_request_body_shape_differs_from_slide16():
-    """Slide 16 shows {question, choices, input}. The SDK sends {state, model, questions}."""
+def test_real_request_body_shape_differs_from_slide30():
+    """Slide 30 shows {question, choices, input}. The SDK sends {state, model, questions}."""
     sent = {}
 
     def capture(request: httpx2.Request) -> httpx2.Response:
@@ -68,7 +68,7 @@ def test_real_request_body_shape_differs_from_slide16():
 
 
 def test_answers_contain_only_what_was_asked():
-    """Slide 9 shows reason_code / risk_level. Jev returns one answer per question you
+    """Slide 23 shows reason_code / risk_level. Jev returns one answer per question you
     ask, so extra fields require extra questions (here: a Score for risk level)."""
     with TypeSafeClient(api_key=MOCK_API_KEY, transport=mock_transport()) as client:
         result = client.system_one(

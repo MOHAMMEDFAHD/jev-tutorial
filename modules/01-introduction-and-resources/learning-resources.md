@@ -32,8 +32,8 @@ documentation index, [`docs.typesafe.ai/llms.txt`](https://docs.typesafe.ai/llms
 
 | Resource | Course connection | |
 |---|---|---|
-| [System One models](https://docs.typesafe.ai/concepts/system-one) | Module 2, slide 7 | ✅ |
-| [AI primer](https://docs.typesafe.ai/introduction/machine-learning-primer) | why calibrated decisions, not text — slide 3 | ✅ |
+| [System One models](https://docs.typesafe.ai/concepts/system-one) | Module 2, slide 21 | ✅ |
+| [AI primer](https://docs.typesafe.ai/introduction/machine-learning-primer) | why calibrated decisions, not text — slide 17 | ✅ |
 | [State](https://docs.typesafe.ai/concepts/state) | `build_state()` in `app/services/questions.py` | ✅ |
 | [Primitives](https://docs.typesafe.ai/primitives) | choosing Choice / Score / Noul | ✅ |
 | [Choice](https://docs.typesafe.ai/primitives/choice) | department question | ✅ |
@@ -71,7 +71,7 @@ documentation index, [`docs.typesafe.ai/llms.txt`](https://docs.typesafe.ai/llms
 |---|---|---|
 | [All cookbooks](https://docs.typesafe.ai/cookbooks) | index | ✅ |
 | [Function calling](https://docs.typesafe.ai/cookbooks/function_calling) | Jev choosing typed function calls | ✅ |
-| [LLM guardrails](https://docs.typesafe.ai/cookbooks/llm_guardrails) | Jev + LLM together (slide 3/6 nuance) | ✅ |
+| [LLM guardrails](https://docs.typesafe.ai/cookbooks/llm_guardrails) | Jev + LLM together (slide 17/20 nuance) | ✅ |
 | [Hierarchical classification](https://docs.typesafe.ai/cookbooks/hierarchical_classification) | many categories (Jev supports up to 255 options per Choice) | ✅ |
 | [Classification using confidence](https://docs.typesafe.ai/cookbooks/classification_using_confidence) | fallback to a broader class when unsure | ✅ |
 | [Classifying RAG passages](https://docs.typesafe.ai/cookbooks/classifying_rag_passages) | filtering retrieved text | ✅ |
@@ -104,7 +104,7 @@ documentation index, [`docs.typesafe.ai/llms.txt`](https://docs.typesafe.ai/llms
 | Resource | Why |
 |---|---|
 | [Advanced: structure](https://docs.typesafe.ai/primitives/advanced) | structured `instructions`/`criteria` |
-| [Date extraction cookbook](https://docs.typesafe.ai/cookbooks/date_extraction_cookbook) | the "compute dates in code" rule behind slide 13's correction |
+| [Date extraction cookbook](https://docs.typesafe.ai/cookbooks/date_extraction_cookbook) | the "compute dates in code" rule behind slide 27's correction |
 | [Self-consistency: choices](https://docs.typesafe.ai/cookbooks/consistency_choice_cookbook) | agreement vs. automation share, related to the Module 8 threshold sweep |
 | [Legal](https://docs.typesafe.ai/legal) | data processing, retention, ZDR — production checklist |
 | [Python SDK source](https://github.com/typesafe-ai/typesafe-sdk-python) | reading the SDK itself |

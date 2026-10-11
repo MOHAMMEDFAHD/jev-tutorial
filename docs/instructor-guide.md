@@ -24,19 +24,34 @@ If live access fails during recording, switch to `--offline` and **say so on cam
 
 ## Using the slide deck (`jev-slides.pdf`)
 
-The deck is [`modules/01-introduction-and-resources/materials/jev-slides.pdf`](../modules/01-introduction-and-resources/materials/jev-slides.pdf): 17 image-only pages (page N = slide N). Great for concepts, not editable. Use them
+The deck is [`modules/01-introduction-and-resources/materials/jev-slides.pdf`](../modules/01-introduction-and-resources/materials/jev-slides.pdf): 31 image-only pages: an opening and intro (pages 1–14), then the Jev slides (pages 15–31). Great for concepts, not editable. Use them
 for the *why*; switch to the editor and terminal for the *how*. Recommended placement:
 
 | Module | Slides | Cue |
 |---|---|---|
-| 1 | 1, 4–6 | what Jev is; Jev vs. n8n positioning (say: they combine — n8n can call this API) |
-| 2 | 2, 3, 7 | how it works, vs. LLMs, System One. **Correct:** `decision` → `choice` |
-| 3 | 10 | the Python snippet is correct — then run `examples/01` |
-| 4 | 11, 12 | support router, email priority. **Say:** Jev predicts, code routes; priority is a **Score** |
-| 5 | 8, 9 | **Correct:** confidence ≠ top probability (0.72 → 0.58); no `reason_code`/`risk_level` fields |
-| 7 | 16 | **Correct** the request shape |
-| 6, 8 | 17 | business rules → action → measure; **say:** 87% / 60% / 40% are illustrative |
-| 9 | 13–15 | business scenarios → `examples/05_business_patterns.py` |
+| 1 | 1–14 | opening: title, TypeSafe, founders, Kahneman & *Thinking, Fast and Slow*, Jevons. **Fixed already:** the "Jew" typo. Page 12's gauge still shows 0.72 (narrate "valid refund: 72%", not "confidence") |
+| 1 | 15, 18–20 | what Jev is; Jev vs. n8n positioning (say: they combine — n8n can call this API) |
+| 2 | 16, 17, 21 | how it works, vs. LLMs, System One. **Correct:** `decision` → `choice` |
+| 3 | 24 | the Python snippet is correct — then run `examples/01` |
+| 4 | 25, 26 | support router, email priority. **Say:** Jev predicts, code routes; priority is a **Score** |
+| 5 | 22, 23 | **Correct:** confidence ≠ top probability (0.72 → 0.58); no `reason_code`/`risk_level` fields |
+| 7 | 30 | **Correct** the request shape |
+| 6, 8 | 31 | business rules → action → measure; **say:** 87% / 60% / 40% are illustrative |
+| 9 | 27–29 | business scenarios → `examples/05_business_patterns.py` |
+
+### 60-minute version
+
+The full material runs about 75–80 minutes. For a 30–60 minute video, trim the theory and keep the build:
+
+| Time | Section | Keep |
+|---|---|---|
+| 00:00 | Opening | pages 1–3 (title, TypeSafe, founders) |
+| 02:00 | Kahneman | pages 4–6, 8, 12 (skip 7, 9, 10, 11) |
+| 06:00 | Jevons | pages 13–14 |
+| 07:00 | Jev slides | pages 15–17, 22–27, 31 (skip 18–21, 28–30; one sentence on n8n) |
+| 14:00 | Repo tour + resources | 2 minutes |
+| 16:00 | Modules 3–8 | about 6–7 minutes each |
+| 54:00 | Module 9 | quick production tour, exercises; skip the Docker build |
 
 One sentence to say early and once: *"Percentages on these slides are illustrations, not Jev
 outputs. Every number you see in the terminal is real."*
@@ -84,7 +99,7 @@ the slides and the reading list.
 
 ## Module 2 — Jev fundamentals (05:00–12:00)
 
-**Explain** with slides 2, 3, 7 (correct `decision` → `choice` on 2–3), minimal code:
+**Explain** with slides 16, 17, 21 (correct `decision` → `choice` on 2–3), minimal code:
 1. LLMs produce text for people; Jev produces typed decisions for code ("a function call": state in,
    typed probabilistic decisions out).
 2. A request = **state** (string, object or array) + a map of named **questions**. Keys are yours and
@@ -179,7 +194,7 @@ only bridge.
 **Teach a verified fact:** the SDK accepts `NaN`, `inf` or `1.5` as a confidence (we tested 0.7.4);
 type-checking is not range-checking. That's why our parser exists.
 
-**Show slide 8, then correct it on camera:** the slide shows confidence 72% for probabilities
+**Show slide 22, then correct it on camera:** the slide shows confidence 72% for probabilities
 0.72 / 0.21 / 0.07. Work the formula: (0.72 − 1/3) / (1 − 1/3) = 0.58. Then prove it in code:
 
 **Run.** `python examples/03_probabilities.py`.
@@ -283,7 +298,7 @@ written by the same author, so its accuracy is meaningless.
 
 ## Module 9 — Production hardening & recap (68:00–75:00)
 
-**Show slides 13–15, then run** `python examples/05_business_patterns.py`. Point out the pattern
+**Show slides 27–29, then run** `python examples/05_business_patterns.py`. Point out the pattern
 the slides don't show: the login hour, the country check and the invoice amount limit are computed
 **in Python**, and Jev gets the results as named facts. The actions are chosen by our thresholds,
 including a deliberately low threshold for a cheap step-up check (verification code).
@@ -300,5 +315,5 @@ version pinning (`JEV_MODEL=jev-1.13.0`) before tuning.
 **Recap** in one sentence: *Jev makes the judgment; your code decides what to do with it.*
 
 **Assign** the three exercises and the final challenge (`docs/student-guide.md`). Exercise 1 adds
-the **shipping** category from slides 11 and 14. Point learners to `modules/01-introduction-and-resources/learning-resources.md`
+the **shipping** category from slides 25 and 28. Point learners to `modules/01-introduction-and-resources/learning-resources.md`
 for what to read next, and warn them that `typesafeai.org` is a third-party site, not `typesafe.ai`.

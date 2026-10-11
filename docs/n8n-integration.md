@@ -1,6 +1,6 @@
 # Using this service from n8n
 
-Slides 4–6 contrast Jev (decisions) with n8n (workflow automation), and slide 16 lists n8n as a
+Slides 18–20 contrast Jev (decisions) with n8n (workflow automation), and slide 30 lists n8n as a
 way to connect data sources. They work best **together**: n8n moves data and performs actions;
 this service makes the typed decision **and applies your business policy**. n8n then branches on
 the policy's `action` instead of re-implementing thresholds in a workflow.
@@ -73,7 +73,7 @@ POST /tickets/{ticket_id}/review
 ```
 
 Those verdicts are your labelled data: `GET /metrics` reports `reviewer_agreement`, and you can
-export them to re-run `evaluation/evaluate.py` on real tickets (slide 17, step 6).
+export them to re-run `evaluation/evaluate.py` on real tickets (slide 31, step 6).
 
 ## Status codes to handle in n8n
 

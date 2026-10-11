@@ -4,8 +4,8 @@
 
 **Goal:** turn native Jev answers into your own typed decisions — and reject anything you can't trust.
 
-**Slides:** pages 8, 9 of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf). ⚠️ Both show confidence 0.72 for
-probabilities 0.72 / 0.21 / 0.07. The real formula gives **0.58**. Slide 9's `reason_code` and
+**Slides:** pages 22, 23 of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf). ⚠️ Both show confidence 0.72 for
+probabilities 0.72 / 0.21 / 0.07. The real formula gives **0.58**. Slide 23's `reason_code` and
 `risk_level` fields don't exist.
 
 ## Concepts

@@ -5,8 +5,8 @@
 **Goal:** turn the toy request into the real decision problem and wrap the SDK in a client the
 rest of the app can depend on.
 
-**Slides:** pages 11, 12 of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf). Slide 11 says Jev "routes" — it only
-predicts; our code routes (Module 6). Slide 12's priority has ordered levels, so it's a **Score**.
+**Slides:** pages 25, 26 of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf). Slide 25 says Jev "routes" — it only
+predicts; our code routes (Module 6). Slide 26's priority has ordered levels, so it's a **Score**.
 
 ## Build
 

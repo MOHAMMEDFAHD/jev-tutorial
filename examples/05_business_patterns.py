@@ -1,6 +1,6 @@
 """Module 9 - the slide deck's business scenarios, built with the real API.
 
-The deck (slides 12-15) shows four scenarios. This file implements each one correctly:
+The deck (slides 26-29) shows four scenarios. This file implements each one correctly:
 
   1. Email prioritization   -> Score (ordered levels), not Choice
   2. Suspicious login       -> Noul, with time/location facts computed IN CODE first
@@ -31,7 +31,7 @@ def show(title: str, decided: str, detail: str) -> None:
 
 
 with TypeSafeClient(**client_kwargs(offline)) as client:
-    # 1. Email prioritization (slide 12). Ordered levels => Score.
+    # 1. Email prioritization (slide 26). Ordered levels => Score.
     email = "Subject: Server is down! Our production server is down. Customers cannot access the website!"
     r = client.system_one(
         state={"email": email},
@@ -56,7 +56,7 @@ with TypeSafeClient(**client_kwargs(offline)) as client:
         f"confidence={p.confidence:.2f}",
     )
 
-    # 2. Suspicious login (slide 13). Compute facts in code; ask Jev only the judgment.
+    # 2. Suspicious login (slide 27). Compute facts in code; ask Jev only the judgment.
     login_hour, usual_hours = 2, range(7, 23)
     known_countries = {"US"}
     facts = {
@@ -78,7 +78,7 @@ with TypeSafeClient(**client_kwargs(offline)) as client:
     action = "require verification code" if p_susp >= 0.3 else "allow"  # low bar: cheap step-up
     show("Suspicious login (Noul)", action, f"facts={facts} -> P(suspicious)={p_susp:.2f}")
 
-    # 3. Invoice review (slide 15). The amount rule is arithmetic -> code. Jev judges text.
+    # 3. Invoice review (slide 29). The amount rule is arithmetic -> code. Jev judges text.
     invoice = {
         "vendor": "Acme Supplies",
         "amount": 12_500.00,
@@ -103,7 +103,7 @@ with TypeSafeClient(**client_kwargs(offline)) as client:
         f"P(vague)={r.nouls['vague_items'].noul:.2f} (Jev)",
     )
 
-    # 4. Customer feedback (slide 15). Unordered labels => Choice.
+    # 4. Customer feedback (slide 29). Unordered labels => Choice.
     r = client.system_one(
         state={"feedback": "Love the new dashboard, but exports are still painfully slow."},
         questions={

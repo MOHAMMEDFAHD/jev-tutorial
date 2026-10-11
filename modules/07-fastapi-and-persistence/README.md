@@ -4,7 +4,7 @@
 
 **Goal:** expose the pipeline as a REST API with an audit trail, safe retries and human review.
 
-**Slides:** page 16 of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf) ("connect the data source"). ⚠️ Its request JSON
+**Slides:** page 30 of [jev-slides.pdf](../01-introduction-and-resources/materials/jev-slides.pdf) ("connect the data source"). ⚠️ Its request JSON
 is wrong; the real shape is `{state, model, questions}`.
 
 ## Build
