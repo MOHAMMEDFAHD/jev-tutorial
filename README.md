@@ -9,10 +9,29 @@ whether each ticket is routed automatically or held for a human.
 
 > **The one idea this course teaches:** *Jev makes the judgment. Your code decides what to do with it.*
 
+## Course modules
+
+**👉 Start with [Module 1](modules/01-introduction-and-resources/README.md)**: it holds the course map,
+the slides, and the learning-resources list. Then follow the modules in order; each folder's README
+gives the goal, slide pages, reading, files, commands and a ✅ checkpoint.
+
+| # | Module | Time |
+|---|---|---|
+| 1 | [Introduction, course materials & resources](modules/01-introduction-and-resources/README.md) | 00–05 |
+| 2 | [Jev fundamentals](modules/02-jev-fundamentals/README.md) | 05–12 |
+| 3 | [Setup & first request](modules/03-setup-and-first-request/README.md) | 12–20 |
+| 4 | [Classification with Jev](modules/04-classification-with-jev/README.md) | 20–30 |
+| 5 | [Probabilities & validation](modules/05-probabilities-and-validation/README.md) | 30–40 |
+| 6 | [Decision policy & routing](modules/06-decision-policy-and-routing/README.md) | 40–50 |
+| 7 | [FastAPI & persistence](modules/07-fastapi-and-persistence/README.md) | 50–60 |
+| 8 | [Testing & evaluation](modules/08-testing-and-evaluation/README.md) | 60–68 |
+| 9 | [Production & next steps](modules/09-production-and-next-steps/README.md) | 68–75 |
+
 ---
 
 ## Contents
 
+[Course modules](#course-modules) ·
 [Jev in 60 seconds](#jev-in-60-seconds) ·
 [Where Jev fits](#where-jev-fits-jev-vs-llms-vs-n8n) ·
 [What you'll build](#what-youll-build) ·
@@ -156,7 +175,8 @@ app/
 examples/01–05            progressive, independently runnable scripts
 tests/                    93 tests (real SDK, mocked network) + 1 live test
 evaluation/               40 labelled synthetic tickets, metrics, evaluate.py
-docs/                     course outline, guides, slide companion, resources, checklist
+modules/01–09/            one folder per module, in order (Module 1 holds the slides, resources PDF, reading list)
+docs/                     course outline, instructor & student guides, slide companion, checklist
 ```
 
 ## Quick start
@@ -192,11 +212,11 @@ Each runs on its own. Add `--offline` to use the mock instead of the API.
 
 | Script | Module | What it shows |
 |---|---|---|
-| `python examples/01_first_request.py` | 2 | first authenticated call, raw response, error handling |
-| `python examples/02_typed_decisions.py` | 3–4 | Choice / Score / Noul → validated application types |
-| `python examples/03_probabilities.py` | 4 | probabilities, confidence (re-computed), margins, thresholds |
-| `python examples/04_automated_routing.py` | 5 | the full pipeline over a batch, incl. graceful degradation |
-| `python examples/05_business_patterns.py` | 8 | the deck's email, login, invoice and feedback scenarios, built correctly |
+| `python examples/01_first_request.py` | 3 | first authenticated call, raw response, error handling |
+| `python examples/02_typed_decisions.py` | 4–5 | Choice / Score / Noul → validated application types |
+| `python examples/03_probabilities.py` | 5 | probabilities, confidence (re-computed), margins, thresholds |
+| `python examples/04_automated_routing.py` | 6 | the full pipeline over a batch, incl. graceful degradation |
+| `python examples/05_business_patterns.py` | 9 | the deck's email, login, invoice and feedback scenarios, built correctly |
 
 ## Run the API
 
@@ -306,20 +326,22 @@ outbox for downstream actions, and thresholds tuned on your own labelled data.
 
 | Document | For |
 |---|---|
+| [modules/](modules/README.md) | the course, one folder per module, in order |
+| [Module 1 materials](modules/01-introduction-and-resources/README.md#course-materials-in-this-folder) | `jev-slides.pdf`, the resources PDF, and the verified reading list |
 | [docs/course-outline.md](docs/course-outline.md) | lesson order, timings, objectives, files, slides |
 | [docs/instructor-guide.md](docs/instructor-guide.md) | recording script, module by module |
-| [docs/slide-companion.md](docs/slide-companion.md) | how to use `jev.pptx`: slide → module, and the five verbal corrections |
+| [docs/slide-companion.md](docs/slide-companion.md) | how to use `jev-slides.pdf`: slide → module, and the five verbal corrections |
 | [docs/student-guide.md](docs/student-guide.md) | self-paced labs, three exercises, final challenge |
 | [docs/architecture.md](docs/architecture.md) | design and data flow |
 | [docs/n8n-integration.md](docs/n8n-integration.md) | calling this service from n8n |
-| [docs/learning-resources.md](docs/learning-resources.md) | all 48 resource links, verified and mapped to modules |
+| [modules/01-introduction-and-resources/learning-resources.md](modules/01-introduction-and-resources/learning-resources.md) | all 48 resource links, verified and mapped to modules |
 | [docs/production-checklist.md](docs/production-checklist.md) | what's done and what isn't |
 
 ## Official resources
 
 Checked against TypeSafe's [documentation index](https://docs.typesafe.ai/llms.txt) on 11 October 2026.
 The full list (48 links, including cookbooks and third-party tutorials) is in
-[docs/learning-resources.md](docs/learning-resources.md).
+[learning-resources.md](modules/01-introduction-and-resources/learning-resources.md) in Module 1.
 
 | Get started | Concepts | Python SDK | Production |
 |---|---|---|---|

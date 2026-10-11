@@ -1,4 +1,4 @@
-"""Module 4 - the automated routing workflow, end to end, without a web server.
+"""Module 6 - the automated routing workflow, end to end, without a web server.
 
 Problem: individual predictions are not a product. We need a workflow that, for every
 ticket, either routes it automatically or holds it for a human - and says why.

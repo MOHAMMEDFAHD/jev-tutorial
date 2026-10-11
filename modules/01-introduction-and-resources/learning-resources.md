@@ -16,32 +16,32 @@ documentation index, [`docs.typesafe.ai/llms.txt`](https://docs.typesafe.ai/llms
 > **typesafeai.org**, which is a different site, not operated by TypeSafe AI as far as we can tell.
 > Never paste an API key into a third-party site, and prefer the official docs when the two disagree.
 
-## 1. Start here (Modules 0–2)
+## 1. Start here (Modules 1–3)
 
 | Resource | Use it for | |
 |---|---|---|
 | [TypeSafe AI website](https://typesafe.ai/) | what Jev and System One models are | ✅ |
 | [Official documentation](https://docs.typesafe.ai/) | everything | ✅ |
 | [API console](https://console.typesafe.ai/) | account, **API keys**, Playground | ✅ |
-| [Quick start](https://docs.typesafe.ai/introduction/quickstart) | first request (cURL, Python) — Module 2 | ✅ |
+| [Quick start](https://docs.typesafe.ai/introduction/quickstart) | first request (cURL, Python) — Module 3 | ✅ |
 | [Models](https://docs.typesafe.ai/models) | `jev-latest` → versioned id, pricing, rate limits, context length | ✅ |
 | [HTTP API reference](https://docs.typesafe.ai/api) | exact request/response fields and error codes | ✅ |
 | [Documentation index](https://docs.typesafe.ai/llms.txt) | every page in one list | ✅ |
 
-## 2. Core concepts (Modules 1, 3, 4)
+## 2. Core concepts (Modules 2, 4, 5)
 
 | Resource | Course connection | |
 |---|---|---|
-| [System One models](https://docs.typesafe.ai/concepts/system-one) | Module 1, slide 7 | ✅ |
+| [System One models](https://docs.typesafe.ai/concepts/system-one) | Module 2, slide 7 | ✅ |
 | [AI primer](https://docs.typesafe.ai/introduction/machine-learning-primer) | why calibrated decisions, not text — slide 3 | ✅ |
 | [State](https://docs.typesafe.ai/concepts/state) | `build_state()` in `app/services/questions.py` | ✅ |
 | [Primitives](https://docs.typesafe.ai/primitives) | choosing Choice / Score / Noul | ✅ |
 | [Choice](https://docs.typesafe.ai/primitives/choice) | department question | ✅ |
 | [Score](https://docs.typesafe.ai/primitives/score) | priority question | ✅ |
 | [Noul](https://docs.typesafe.ai/primitives/noul) | needs-human question | ✅ |
-| [Confidence](https://docs.typesafe.ai/confidence) | **the** page for Module 4; formulas used in `examples/03` and the slide-8 correction | ✅ |
+| [Confidence](https://docs.typesafe.ai/confidence) | **the** page for Module 5; formulas used in `examples/03` and the slide-8 correction | ✅ |
 
-## 3. Python & JavaScript SDKs (Modules 2–3, 7)
+## 3. Python & JavaScript SDKs (Modules 3–4, 8)
 
 | Resource | Course connection | |
 |---|---|---|
@@ -54,7 +54,7 @@ documentation index, [`docs.typesafe.ai/llms.txt`](https://docs.typesafe.ai/llms
 | [Exceptions](https://docs.typesafe.ai/sdk/python/api/exceptions) | error mapping in `jev_client.py` | ✅ |
 | [JavaScript SDK](https://docs.typesafe.ai/sdk/javascript) | if your stack is Node/TypeScript (final challenge) | ✅ |
 
-## 4. Building real applications (Modules 5–6)
+## 4. Building real applications (Modules 6–7)
 
 | Resource | Where this course applies it | |
 |---|---|---|
@@ -79,7 +79,7 @@ documentation index, [`docs.typesafe.ai/llms.txt`](https://docs.typesafe.ai/llms
 | [Simple memory system](https://docs.typesafe.ai/cookbooks/basic_memory) | — | ⚠️ not in the official index |
 | [Smart home demo](https://docs.typesafe.ai/demos/smart-home) | a complete working app | ✅ |
 
-## 6. Production & limitations (Modules 7–8)
+## 6. Production & limitations (Modules 8–9)
 
 | Resource | Course connection | |
 |---|---|---|
@@ -105,6 +105,6 @@ documentation index, [`docs.typesafe.ai/llms.txt`](https://docs.typesafe.ai/llms
 |---|---|
 | [Advanced: structure](https://docs.typesafe.ai/primitives/advanced) | structured `instructions`/`criteria` |
 | [Date extraction cookbook](https://docs.typesafe.ai/cookbooks/date_extraction_cookbook) | the "compute dates in code" rule behind slide 13's correction |
-| [Self-consistency: choices](https://docs.typesafe.ai/cookbooks/consistency_choice_cookbook) | agreement vs. automation share, related to the Module 7 threshold sweep |
+| [Self-consistency: choices](https://docs.typesafe.ai/cookbooks/consistency_choice_cookbook) | agreement vs. automation share, related to the Module 8 threshold sweep |
 | [Legal](https://docs.typesafe.ai/legal) | data processing, retention, ZDR — production checklist |
 | [Python SDK source](https://github.com/typesafe-ai/typesafe-sdk-python) | reading the SDK itself |

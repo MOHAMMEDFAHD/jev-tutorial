@@ -1,4 +1,4 @@
-"""Module 1 - your first Jev request.
+"""Module 3 - your first Jev request.
 
 Problem: we want software to decide something about a support message ("is it urgent?",
 "which team?") and get back a value our code can branch on - not a paragraph to parse.

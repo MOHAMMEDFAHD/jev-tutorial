@@ -1,4 +1,4 @@
-"""Module 3 - probabilities, confidence, and thresholds.
+"""Module 5 - probabilities, confidence, and thresholds.
 
 Problem: a classifier that is right 90% of the time is only automatable if it can tell
 you WHICH 10% it's unsure about. Jev returns the full probability distribution; our code

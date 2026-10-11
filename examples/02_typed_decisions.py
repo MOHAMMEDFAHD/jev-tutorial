@@ -1,4 +1,4 @@
-"""Module 2 - typed decisions: Choice, Score, Noul, and our own application types.
+"""Modules 4-5 - typed decisions: Choice, Score, Noul, and our own application types.
 
 Problem: "the model returned something" isn't good enough. Our code needs to know the
 answer is one of OUR departments, a real priority level, a real probability - or fail loudly.

@@ -1,4 +1,4 @@
-"""Module 8 bonus - the slide deck's business scenarios, built with the real API.
+"""Module 9 - the slide deck's business scenarios, built with the real API.
 
 The deck (slides 12-15) shows four scenarios. This file implements each one correctly:
 

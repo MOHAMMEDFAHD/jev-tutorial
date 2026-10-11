@@ -63,7 +63,7 @@ feedback scenarios with the real API. For each one, find which parts are compute
 
 ## Reading
 
-Each lab's background reading is mapped in [learning-resources.md](learning-resources.md).
+Each lab's background reading is mapped in [learning-resources.md](../modules/01-introduction-and-resources/learning-resources.md).
 Start with **Confidence** and **Known limitations**. The guides on `typesafeai.org` are third-party,
 not TypeSafe's (`typesafe.ai`); prefer the official docs when they disagree.
 
