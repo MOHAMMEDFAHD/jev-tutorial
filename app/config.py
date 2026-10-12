@@ -13,7 +13,11 @@ from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+    # env_ignore_empty: a line like "JEV_BACKEND=" in .env means "use the default" instead of
+    # failing validation (or, worse, silently turning a safety list into an empty one).
+    model_config = SettingsConfigDict(
+        env_file=".env", env_file_encoding="utf-8", extra="ignore", env_ignore_empty=True
+    )
 
     # --- Jev / TypeSafe -------------------------------------------------------------
     # "typesafe" calls the real API. "mock" uses an OFFLINE keyword mock (see
