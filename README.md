@@ -173,7 +173,8 @@ app/
   database/               SQLAlchemy model, session, repository (idempotent insert, metrics)
   utils/                  JSON logging, PII redaction
 examples/01–05            progressive, independently runnable scripts
-tests/                    93 tests (real SDK, mocked network) + 1 live test
+tests/                    98 tests (real SDK, mocked network) + 1 live test
+ui/jev_playground.py      local browser playground (Streamlit)
 evaluation/               40 labelled synthetic tickets, metrics, evaluate.py
 modules/01–09/            one folder per module, in order (Module 1 holds the slides, resources PDF, reading list)
 docs/                     course outline, instructor & student guides, slide companion, checklist
@@ -191,7 +192,7 @@ git clone <your-fork-url> practical-jev-ai && cd practical-jev-ai
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 cp .env.example .env        # then set TYPESAFE_API_KEY=… (or JEV_BACKEND=mock)
-pytest -q                   # 93 passed, 1 skipped
+pytest -q                   # 98 passed, 1 skipped
 ```
 
 **Windows (PowerShell)**
@@ -217,6 +218,19 @@ Each runs on its own. Add `--offline` to use the mock instead of the API.
 | `python examples/03_probabilities.py` | 5 | probabilities, confidence (re-computed), margins, thresholds |
 | `python examples/04_automated_routing.py` | 6 | the full pipeline over a batch, incl. graceful degradation |
 | `python examples/05_business_patterns.py` | 9 | the deck's email, login, invoice and feedback scenarios, built correctly |
+
+## Try it in your browser (playground)
+
+A small local app to type any customer message and see Jev's decision instantly:
+the department, priority and "needs a person?" with their probabilities, what the policy
+does with them, and why. Policy sliders re-check the last answer without calling Jev again.
+
+```bash
+pip install -e ".[ui]"
+streamlit run ui/jev_playground.py      # opens http://localhost:8501
+```
+Run it from the repository root so your `.env` is found. Choose **Live Jev** (uses your key)
+or the **offline mock** in the sidebar.
 
 ## Run the API
 
@@ -253,9 +267,10 @@ Response from a run against the **offline mock** (note `"model": "mock-offline"`
 ## Run the tests
 
 ```bash
-pytest -q                                   # 93 tests, no network needed
+pytest -q                                   # 98 tests, no network needed
 pytest tests/test_slide_claims.py -v        # the slide-deck corrections, verified
 RUN_LIVE_TESTS=1 pytest -m live -s          # 1 contract test against the real API (needs a key)
+# PowerShell: $env:RUN_LIVE_TESTS = "1"; pytest -m live -s
 ruff format --check . && ruff check .
 ```
 Tests drive the **real** TypeSafe SDK through a mocked network (`httpx2.MockTransport`), so the

@@ -12,7 +12,7 @@ pip install -e ".[dev]"
 cp .env.example .env                                    # Windows: Copy-Item .env.example .env
 ```
 Put your key in `.env` (`TYPESAFE_API_KEY=...`).
-✅ `pytest -q` ends with `93 passed, 1 skipped`.
+✅ `pytest -q` ends with `98 passed, 1 skipped`.
 
 ## Lab 1 — First request
 

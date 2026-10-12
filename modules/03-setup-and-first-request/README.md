@@ -27,7 +27,7 @@ Put your key in `.env` as `TYPESAFE_API_KEY=...` (from the [console](https://con
 `--offline` to examples.
 
 ```bash
-pytest -q          # expect: 93 passed, 1 skipped
+pytest -q          # expect: 98 passed, 1 skipped
 ```
 
 ## First request

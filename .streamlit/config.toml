@@ -1,0 +1,11 @@
+# Theme for the local playground (streamlit run ui/jev_playground.py).
+# Colors follow the course slides: navy text, Jev yellow, signal blue.
+[theme]
+base = "light"
+primaryColor = "#2357F5"
+backgroundColor = "#F7F9FD"
+secondaryBackgroundColor = "#FFF6DC"
+textColor = "#14204A"
+
+[browser]
+gatherUsageStats = false

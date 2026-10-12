@@ -14,7 +14,7 @@ Strategy: **mock the network, not your code.** [`tests/conftest.py`](../../tests
 types run for real.
 
 ```bash
-pytest -q                                   # 93 passed, 1 skipped
+pytest -q                                   # 98 passed, 1 skipped
 pytest tests/test_slide_claims.py -v        # the slide corrections, verified
 RUN_LIVE_TESTS=1 pytest -m live -s          # one contract test against the real API (needs a key)
 ```

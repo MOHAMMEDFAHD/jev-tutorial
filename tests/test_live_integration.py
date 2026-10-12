@@ -18,8 +18,8 @@ from app.services.jev_client import build_jev_client
 pytestmark = [
     pytest.mark.live,
     pytest.mark.skipif(
-        not (os.getenv("RUN_LIVE_TESTS") == "1" and os.getenv("TYPESAFE_API_KEY")),
-        reason="set RUN_LIVE_TESTS=1 and TYPESAFE_API_KEY to call the real API",
+        not (os.getenv("RUN_LIVE_TESTS") == "1" and Settings().typesafe_api_key),
+        reason="set RUN_LIVE_TESTS=1 and TYPESAFE_API_KEY (in .env or the environment)",
     ),
 ]
 

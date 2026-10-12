@@ -79,6 +79,32 @@ class JevResult:
     latency_ms: float
 
 
+def to_jev_error(exc: TypeSafeError) -> JevError:
+    """Translate any SDK exception into the application's JevError hierarchy.
+
+    Shared by the async JevClient (the API server) and the sync client used by the
+    local playground UI, so both report failures identically.
+    """
+    # Order matters: subclasses before their parents.
+    if isinstance(exc, TypeSafeAPIResponseValidationError):
+        return JevResponseError(f"invalid field: {exc.field_path}", request_id=exc.request_id)
+    if isinstance(exc, TypeSafeAuthenticationError | TypeSafePermissionDeniedError):
+        return JevAuthError(f"HTTP {exc.status}", request_id=exc.request_id)
+    if isinstance(exc, TypeSafeRateLimitError):
+        return JevRateLimitError("HTTP 429", request_id=exc.request_id)
+    if isinstance(exc, TypeSafeUnprocessableEntityError):
+        return JevBadRequestError("HTTP 422", request_id=exc.request_id)
+    if isinstance(exc, TypeSafeAPIError):
+        if 400 <= exc.status < 500:
+            return JevBadRequestError(f"HTTP {exc.status}", request_id=exc.request_id)
+        return JevUnavailableError(f"HTTP {exc.status}", request_id=exc.request_id)
+    if isinstance(exc, TypeSafeAPITimeoutError):
+        return JevTimeoutError("request timed out")
+    if isinstance(exc, TypeSafeAPIConnectionError):
+        return JevUnavailableError("connection failed")
+    return JevBadRequestError(type(exc).__name__)  # client-side validation, e.g. empty questions
+
+
 class JevClient:
     """Application-facing Jev client. One instance is shared for the app's lifetime."""
 
@@ -93,27 +119,8 @@ class JevClient:
                 state=build_state(message),
                 questions=build_ticket_questions(),
             )
-        # Order matters: subclasses before their parents.
-        except TypeSafeAPIResponseValidationError as exc:
-            raise JevResponseError(
-                f"invalid field: {exc.field_path}", request_id=exc.request_id
-            ) from exc
-        except (TypeSafeAuthenticationError, TypeSafePermissionDeniedError) as exc:
-            raise JevAuthError(f"HTTP {exc.status}", request_id=exc.request_id) from exc
-        except TypeSafeRateLimitError as exc:
-            raise JevRateLimitError("HTTP 429", request_id=exc.request_id) from exc
-        except TypeSafeUnprocessableEntityError as exc:
-            raise JevBadRequestError("HTTP 422", request_id=exc.request_id) from exc
-        except TypeSafeAPIError as exc:
-            if 400 <= exc.status < 500:
-                raise JevBadRequestError(f"HTTP {exc.status}", request_id=exc.request_id) from exc
-            raise JevUnavailableError(f"HTTP {exc.status}", request_id=exc.request_id) from exc
-        except TypeSafeAPITimeoutError as exc:
-            raise JevTimeoutError("request timed out") from exc
-        except TypeSafeAPIConnectionError as exc:
-            raise JevUnavailableError("connection failed") from exc
-        except TypeSafeError as exc:  # client-side validation, e.g. empty questions
-            raise JevBadRequestError(type(exc).__name__) from exc
+        except TypeSafeError as exc:
+            raise to_jev_error(exc) from exc
         latency_ms = (time.perf_counter() - started) * 1000
         return JevResult(response=response, latency_ms=latency_ms)
 
