@@ -6,10 +6,10 @@ None of them is a TypeSafe/Jev recommendation. TypeSafe's docs say the right val
 """
 
 from functools import lru_cache
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import Field, SecretStr
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import Field, SecretStr, field_validator
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -35,7 +35,8 @@ class Settings(BaseSettings):
     # Escalate if the probability of "critical" alone reaches this, even if it isn't the argmax.
     critical_escalation_probability: float = Field(default=0.25, ge=0, le=1)
     # Priorities that ALWAYS go to a human, no matter how confident the model is.
-    mandatory_review_priorities: list[str] = ["critical"]
+    # Accepts "critical", "critical,high" or the JSON form ["critical"] in .env.
+    mandatory_review_priorities: Annotated[list[str], NoDecode] = ["critical"]
 
     # --- Input limits & privacy ---------------------------------------------------
     max_message_chars: int = Field(default=4000, gt=0)
@@ -44,6 +45,19 @@ class Settings(BaseSettings):
     # --- Infrastructure -----------------------------------------------------------
     database_url: str = "sqlite:///./tickets.db"
     log_level: str = "INFO"
+
+    @field_validator("mandatory_review_priorities", mode="before")
+    @classmethod
+    def _parse_priority_list(cls, value):
+        if isinstance(value, str):
+            # Straighten "smart" quotes that editors and websites insert automatically.
+            text = value.strip().translate(str.maketrans("\u201c\u201d\u2018\u2019", "\"\"''"))
+            if text.startswith("["):
+                import json
+
+                return json.loads(text)
+            return [part.strip().strip("\"'") for part in text.split(",") if part.strip()]
+        return value
 
 
 @lru_cache

@@ -29,19 +29,21 @@ logger = logging.getLogger("app")
 
 def create_app(settings: Settings | None = None, jev_client: JevClient | None = None) -> FastAPI:
     """Build the app. Tests pass their own settings and a JevClient wired to a mock transport."""
-    settings = settings or get_settings()
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
-        configure_logging(settings.log_level)
-        engine = create_db_engine(settings.database_url)
+        # Read .env only when the server starts, never at import time, so a typo in
+        # .env can't break test collection or tools that merely import this module.
+        cfg = settings or get_settings()
+        configure_logging(cfg.log_level)
+        engine = create_db_engine(cfg.database_url)
         init_db(engine)
-        jev = jev_client or build_jev_client(settings)  # fails fast on a missing API key
-        app.state.settings = settings
+        jev = jev_client or build_jev_client(cfg)  # fails fast on a missing API key
+        app.state.settings = cfg
         app.state.engine = engine
         app.state.repository = TicketRepository(make_session_factory(engine))
-        app.state.decision_service = DecisionService(jev, AutomationPolicy.from_settings(settings))
-        model = settings.jev_model if jev.backend_name == "typesafe" else "mock-offline"
+        app.state.decision_service = DecisionService(jev, AutomationPolicy.from_settings(cfg))
+        model = cfg.jev_model if jev.backend_name == "typesafe" else "mock-offline"
         logger.info(
             "startup", extra={"fields": {"jev_backend": jev.backend_name, "jev_model": model}}
         )
