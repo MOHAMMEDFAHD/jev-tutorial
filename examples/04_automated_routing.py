@@ -3,8 +3,7 @@
 Problem: individual predictions are not a product. We need a workflow that, for every
 ticket, either routes it automatically or holds it for a human - and says why.
 
-Pipeline: redact PII -> one Jev call (3 questions) -> validate -> policy -> route.
-Runs the tickets concurrently with the async client, as the API server does.
+Pipeline: redact PII -> one Jev call (3 decisions, 6 questions) -> validate -> policy -> route.
 
 Run:  python examples/04_automated_routing.py [--offline]
       With --offline, the last ticket simulates a Jev timeout to show graceful degradation.

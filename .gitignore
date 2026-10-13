@@ -18,3 +18,13 @@ venv/
 *.db-wal
 evaluation/results/*.json
 !evaluation/results/.gitkeep
+
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+.pytest_cache/
+*.db
+*.db-shm
+*.db-wal
