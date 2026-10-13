@@ -1,8 +1,11 @@
 """The decision problem we ask Jev, defined with the official SDK question types.
 
 Design notes (from TypeSafe's docs, see docs/architecture.md for links):
-* One atomic question per decision. All three go in ONE request and are evaluated
-  in parallel against the same state, so adding a question barely changes latency.
+* Three decisions: department (Choice), priority (Score) and human review. Human review is
+  answered by FOUR narrow yes/no checks (Nouls) rather than one combined question; our code
+  then applies "any check likely -> a person" (TypeSafe: use one Noul per label when several
+  may apply). All questions go in ONE request and are evaluated in parallel against the
+  same state, so the extra checks barely change latency.
 * Jev reads instructions literally, so criteria spell out boundary cases explicitly.
 * Question keys ("department", ...) are NOT sent to the model; only instructions/criteria are.
 * Choice option order can bias jev-1.13 toward the first option; evaluate with your data.
@@ -14,7 +17,7 @@ from app.models.decision import Department, Priority
 
 DEPARTMENT_KEY = "department"
 PRIORITY_KEY = "priority"
-HUMAN_REVIEW_KEY = "needs_human"
+HUMAN_REVIEW_PREFIX = "needs_human_"  # question keys look like "needs_human_legal_threat"
 
 DEPARTMENT_CRITERIA: dict[str, str] = {
     Department.BILLING: (
@@ -48,15 +51,31 @@ PRIORITY_CRITERIA: list[str] = [
 ]
 assert [level.split(":")[0] for level in PRIORITY_CRITERIA] == [p.value for p in Priority]
 
-HUMAN_REVIEW_INSTRUCTIONS = (
-    "Does this message require a human support agent rather than an automated workflow? "
-    "Answer yes if it contains a legal threat, a request for compensation beyond a standard "
-    "refund, a report of fraud or account takeover, or a request to speak to a manager."
-)
+# Decision C: four narrow yes/no checks. Each answers ONE condition; the policy sends the
+# ticket to a person if ANY of them is likely. The name of each check becomes the reason
+# a reviewer sees, e.g. "needs_human:legal_threat".
+HUMAN_REVIEW_CHECKS: dict[str, str] = {
+    "legal_threat": (
+        "Does the customer threaten legal action, or say they will involve a lawyer, a court "
+        "or a regulator?"
+    ),
+    "fraud_or_takeover": (
+        "Does the customer report fraud, stolen payment details, or that someone else has "
+        "accessed or taken over their account? A billing mistake such as a double charge "
+        "is not fraud."
+    ),
+    "compensation_request": (
+        "Does the customer ask for compensation beyond refunding a charge, such as credits, "
+        "damages, or payment for lost business?"
+    ),
+    "manager_request": (
+        "Does the customer ask to speak to a manager, a supervisor, or someone more senior?"
+    ),
+}
 
 
 def build_ticket_questions() -> dict[str, Choice | Score | Noul]:
-    """Return the three questions sent with every ticket (one request, parallel evaluation)."""
+    """Return every question sent with a ticket: Choice + Score + four Nouls, in ONE request."""
     return {
         DEPARTMENT_KEY: Choice(
             instructions="Which support department should handle this customer message?",
@@ -66,7 +85,10 @@ def build_ticket_questions() -> dict[str, Choice | Score | Noul]:
             instructions="How urgent is this customer message?",
             criteria=list(PRIORITY_CRITERIA),
         ),
-        HUMAN_REVIEW_KEY: Noul(instructions=HUMAN_REVIEW_INSTRUCTIONS),
+        **{
+            HUMAN_REVIEW_PREFIX + name: Noul(instructions=instructions)
+            for name, instructions in HUMAN_REVIEW_CHECKS.items()
+        },
     }
 
 

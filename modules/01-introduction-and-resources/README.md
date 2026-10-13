@@ -36,7 +36,7 @@ TypeSafe's bet is that fast, cheap AI decisions will appear everywhere inside so
 | **1** | **Introduction, materials & resources** *(you are here)* | 00–05 | the map, the slides, the reading list |
 | 2 | [Jev fundamentals](../02-jev-fundamentals/README.md) | 05–12 | state, questions, Choice / Score / Noul, confidence |
 | 3 | [Setup & first request](../03-setup-and-first-request/README.md) | 12–20 | a working environment and one real API call |
-| 4 | [Classification with Jev](../04-classification-with-jev/README.md) | 20–30 | the three ticket questions and a Jev client |
+| 4 | [Classification with Jev](../04-classification-with-jev/README.md) | 20–30 | the ticket questions (three decisions) and a Jev client |
 | 5 | [Probabilities & validation](../05-probabilities-and-validation/README.md) | 30–40 | typed, validated decisions |
 | 6 | [Decision policy & routing](../06-decision-policy-and-routing/README.md) | 40–50 | an automated workflow with human review |
 | 7 | [FastAPI & persistence](../07-fastapi-and-persistence/README.md) | 50–60 | a REST API with an audit trail |

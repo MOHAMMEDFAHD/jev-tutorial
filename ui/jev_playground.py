@@ -49,6 +49,13 @@ QUEUE_NAMES = {
     "escalation_queue": "escalation queue (senior agent)",
 }
 
+CHECK_LABELS = {
+    "legal_threat": "a legal threat",
+    "fraud_or_takeover": "fraud or an account takeover",
+    "compensation_request": "a request for compensation beyond a refund",
+    "manager_request": "a request to speak to a manager",
+}
+
 FAILURE_TEXT = {
     "jev_auth_failed": "Jev rejected the API key. Check TYPESAFE_API_KEY in your .env file.",
     "jev_rate_limited": "Jev is rate limiting requests. Wait a few seconds and try again.",
@@ -113,6 +120,13 @@ def ask_jev(message: str, backend: str) -> JevCall:
 
 # ---- Explaining the policy -------------------------------------------------------------
 def explain(reason: str, d: TicketDecision, p: AutomationPolicy) -> str:
+    if reason.startswith(Reason.HUMAN_REQUESTED + ":"):
+        name = reason.split(":", 1)[1]
+        prob = d.human_review.checks.get(name, d.human_review.probability)
+        return (
+            f"Jev sees {CHECK_LABELS.get(name, name)} ({prob:.0%}; "
+            f"a person steps in at {p.human_review_noul_threshold:.0%})."
+        )
     texts = {
         Reason.ALL_CHECKS_PASSED: "Every check passed, so no person is needed.",
         Reason.MANDATORY_PRIORITY: (
@@ -121,10 +135,6 @@ def explain(reason: str, d: TicketDecision, p: AutomationPolicy) -> str:
         Reason.CRITICAL_RISK: (
             f"The chance this is critical is {d.priority.probabilities[Priority.CRITICAL]:.0%} "
             f"(the limit is {p.critical_escalation_probability:.0%})."
-        ),
-        Reason.HUMAN_REQUESTED: (
-            f"Jev thinks a person should handle this ({d.human_review.probability:.0%}; "
-            f"the limit is {p.human_review_noul_threshold:.0%})."
         ),
         Reason.LOW_DEPARTMENT_CONFIDENCE: (
             f"Department confidence is {d.department.confidence:.2f}, "
@@ -225,9 +235,15 @@ def show_verdict(call: JevCall, policy: AutomationPolicy) -> None:
             f"{d.priority.expected_score:.2f} of 3"
         )
     with col3:
-        st.markdown("**Needs a person? (Noul)**")
-        st.markdown(f"Yes {d.human_review.probability:.0%}")
-        st.progress(d.human_review.probability)
+        st.markdown("**Needs a person? (4 Noul checks)**")
+        for name, prob in d.human_review.checks.items():
+            label = CHECK_LABELS.get(name, name)
+            fired = prob >= policy.human_review_noul_threshold
+            st.markdown(
+                f'<span class="{"chosen" if fired else ""}">{label}</span> &nbsp; {prob:.0%}',
+                unsafe_allow_html=True,
+            )
+            st.progress(prob)
 
     with st.expander("Details: model, timing and the raw answer"):
         st.write(f"Model: `{d.model}`")

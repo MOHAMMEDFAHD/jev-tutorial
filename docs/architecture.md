@@ -13,7 +13,7 @@ Client ── POST /tickets ──► api/routes.py
                       services/decision_service.py  (never raises on model failure)
                               │
                               ├─► services/jev_client.py ──► typesafe_sdk.AsyncTypeSafeClient
-                              │        one request: state + 3 questions (questions.py)
+                              │        one request: state + all questions (questions.py)
                               │        SDK: timeout, retries w/ backoff, Retry-After
                               │        SDK exceptions ──► JevAuthError / JevRateLimitError / ...
                               │
@@ -58,7 +58,7 @@ change touches `automation_policy.py`; nothing in `policies/` imports `typesafe_
 | `ChoiceAnswer.probabilities: dict[str, float]` | validated: keys == our options, values in [0,1], sum ≈ 1, `choice` is the argmax |
 | `ScoreAnswer.score: float` (expected level) | kept as `expected_score`; level = **argmax** of probabilities (TypeSafe advises against interpolating between levels) |
 | `ScoreAnswer.probabilities: dict[int, float]` | re-keyed to `Priority` |
-| `NoulAnswer.noul: float` | `HumanReviewSignal.probability` |
+| four `NoulAnswer.noul: float` (legal threat, fraud or takeover, compensation, manager request) | `HumanReviewSignal.checks`, plus `probability` = the highest of them (computed by us) |
 | — | `top2_margin` (computed), `PolicyOutcome` (policy) |
 
 Verified behaviour of `typesafe-sdk` 0.7.4 that shaped this design:
@@ -86,7 +86,7 @@ business rules           │
   priority ∈ mandatory   │
   P(critical) ≥ limit    │
 model's own judgment     │
-  P(needs human) ≥ t     │
+  any human check ≥ t    │
 uncertainty gates        │
   dept confidence < t    │
   top-2 margin < t       │
@@ -101,7 +101,7 @@ and `/metrics` and the evaluation can show which rule drives the review rate.
 
 `ticket_id`, `customer_id`, SHA-256 of the original message (for idempotency checks),
 the **redacted** message, department + confidence + full probability distribution, priority
-level + expected score + confidence, P(needs human), model id, TypeSafe request id, input
+level + expected score + confidence, the four human-review checks and their maximum, model id, TypeSafe request id, input
 tokens, latency, action, queue, reasons, status, error reason, and the human review
 (reviewer, final department/priority, notes, time). The original message and API keys are
 never stored or logged.

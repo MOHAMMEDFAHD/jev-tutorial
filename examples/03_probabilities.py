@@ -53,7 +53,8 @@ with TypeSafeClient(**client_kwargs(offline)) as client:
             print(f"   {label.value:<10} {p:5.2f} {bar(p)}")
         recomputed = choice_confidence(list(dept.probabilities.values()))
         ratio = probs[0][1] / probs[1][1] if probs[1][1] > 0 else float("inf")
-        human_p = decision.human_review.probability
+        human_p = decision.human_review.probability  # the highest of the four checks
+        strongest = max(decision.human_review.checks, key=decision.human_review.checks.get)
         print(
             f"   reported confidence {dept.confidence:.3f}   (formula re-computed: {recomputed:.3f})"
         )
@@ -66,7 +67,8 @@ with TypeSafeClient(**client_kwargs(offline)) as client:
             f"(score {decision.priority.expected_score:.2f}, conf {decision.priority.confidence:.2f})"
         )
         print(
-            f"   P(needs human)      {human_p:.2f}   noul confidence |2p-1| = {abs(2 * human_p - 1):.2f}"
+            f"   P(needs human)      {human_p:.2f}   (strongest check: {strongest})   "
+            f"noul confidence |2p-1| = {abs(2 * human_p - 1):.2f}"
         )
 
 # The SAME predictions under three different policies: only our thresholds change.

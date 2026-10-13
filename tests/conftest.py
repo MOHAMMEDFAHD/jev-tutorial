@@ -17,6 +17,7 @@ from app.config import Settings
 from app.main import create_app
 from app.models.decision import Department
 from app.services.jev_client import JevClient, build_jev_client
+from app.services.questions import HUMAN_REVIEW_CHECKS
 
 Handler = Callable[[httpx2.Request], httpx2.Response]
 
@@ -41,6 +42,7 @@ def wire_response(
     priority_probs: list[float] | None = None,
     priority_confidence: float = 0.9,
     needs_human: float = 0.05,
+    human_checks: dict[str, float] | None = None,
     model: str = "jev-1.13.0",
 ) -> dict:
     """Build a response body in the documented /v1/systemone wire format."""
@@ -65,7 +67,14 @@ def wire_response(
                 },
                 "probabilities": {str(i): p for i, p in enumerate(priority_probs)},
             },
-            "needs_human": {"type": "noul", "noul": needs_human},
+            # Four human-review checks: `needs_human` sets all, `human_checks` overrides some.
+            **{
+                f"needs_human_{name}": {
+                    "type": "noul",
+                    "noul": (human_checks or {}).get(name, needs_human),
+                }
+                for name in HUMAN_REVIEW_CHECKS
+            },
         },
         "usage": {"input_tokens": 300, "output_tokens": 30},
     }

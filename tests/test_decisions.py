@@ -85,14 +85,16 @@ def test_confidence_out_of_range_or_not_finite_is_rejected(bad):
 
 def test_missing_prediction_is_rejected():
     body = wire_response()
-    del body["answers"]["needs_human"]
-    with pytest.raises(DecisionValidationError, match="missing answer for question 'needs_human'"):
+    del body["answers"]["needs_human_legal_threat"]
+    with pytest.raises(
+        DecisionValidationError, match="missing answer for question 'needs_human_legal_threat'"
+    ):
         parse(body)
 
 
 def test_wrong_answer_type_is_rejected():
     body = wire_response()
-    body["answers"]["needs_human"] = body["answers"]["department"]
+    body["answers"]["needs_human_manager_request"] = body["answers"]["department"]
     with pytest.raises(DecisionValidationError, match="expected NoulAnswer"):
         parse(body)
 
@@ -101,4 +103,19 @@ def test_priority_with_wrong_number_of_levels_is_rejected():
     body = wire_response()
     body["answers"]["priority"]["probabilities"] = {"0": 0.5, "1": 0.5}
     with pytest.raises(DecisionValidationError, match="priority: probability keys"):
+        parse(body)
+
+
+def test_human_review_keeps_each_check_and_uses_the_highest():
+    decision = parse(wire_response(needs_human=0.05, human_checks={"legal_threat": 0.91}))
+    assert decision.human_review.checks["legal_threat"] == 0.91
+    assert decision.human_review.checks["manager_request"] == 0.05
+    assert decision.human_review.probability == 0.91  # any one likely check is enough
+
+
+@pytest.mark.parametrize("bad", [1.5, math.nan])
+def test_each_human_check_is_range_checked(bad):
+    body = wire_response()
+    body["answers"]["needs_human_fraud_or_takeover"]["noul"] = bad
+    with pytest.raises(DecisionValidationError, match="needs_human_fraud_or_takeover"):
         parse(body)

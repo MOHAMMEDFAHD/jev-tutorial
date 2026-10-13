@@ -60,9 +60,15 @@ class PriorityDecision(_Frozen):
 
 
 class HumanReviewSignal(_Frozen):
-    """Decision C: does this need a human? (Jev Noul = probability that the answer is yes)."""
+    """Decision C: does this need a human?
+
+    Jev answers four narrow yes/no checks (Nouls), e.g. {"legal_threat": 0.92, ...}.
+    `probability` is the HIGHEST of them (computed by us): "any serious condition" means
+    a person should look, so one likely check is enough.
+    """
 
     probability: float = Field(ge=0, le=1)
+    checks: dict[str, float] = Field(default_factory=dict)  # returned by Jev, one per check
 
 
 class TicketDecision(_Frozen):

@@ -34,7 +34,7 @@
 
 | File | What to look at (read only for now) |
 |---|---|
-| [`app/services/questions.py`](../../app/services/questions.py) | the three questions this course asks about every ticket |
+| [`app/services/questions.py`](../../app/services/questions.py) | the questions (three decisions) this course asks about every ticket |
 
 ## Reading
 

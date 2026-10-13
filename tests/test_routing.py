@@ -46,7 +46,10 @@ def decision(
             confidence=priority_confidence,
             probabilities=prio_probs,
         ),
-        human_review=HumanReviewSignal(probability=needs_human),
+        human_review=HumanReviewSignal(
+            probability=needs_human,
+            checks={"legal_threat": needs_human, "manager_request": 0.01},
+        ),
         model="jev-1.13.0",
     )
 
@@ -66,7 +69,7 @@ def test_confident_routine_ticket_is_auto_routed():
         ({"dept_confidence": 0.45}, Reason.LOW_DEPARTMENT_CONFIDENCE),
         ({"margin": 0.05}, Reason.AMBIGUOUS_DEPARTMENT),
         ({"priority_confidence": 0.2}, Reason.LOW_PRIORITY_CONFIDENCE),
-        ({"needs_human": 0.7}, Reason.HUMAN_REQUESTED),
+        ({"needs_human": 0.7}, Reason.human_check("legal_threat")),
         ({"p_critical": 0.3, "priority": Priority.HIGH}, Reason.CRITICAL_RISK),
     ],
 )
@@ -89,7 +92,7 @@ def test_all_fired_reasons_are_reported():
     assert set(reasons) == {
         Reason.LOW_DEPARTMENT_CONFIDENCE,
         Reason.AMBIGUOUS_DEPARTMENT,
-        Reason.HUMAN_REQUESTED,
+        Reason.human_check("legal_threat"),
     }
 
 
@@ -137,3 +140,20 @@ def test_critical_review_tickets_are_escalated():
 
 def test_missing_decision_falls_back_to_human_review():
     assert route_ticket(None, Action.AUTO_ROUTE) == HUMAN_REVIEW_QUEUE
+
+
+def test_every_fired_human_check_is_named_in_the_reasons():
+    d = decision()
+    d = d.model_copy(
+        update={
+            "human_review": HumanReviewSignal(
+                probability=0.9,
+                checks={"legal_threat": 0.9, "manager_request": 0.8, "fraud_or_takeover": 0.1},
+            )
+        }
+    )
+    action, reasons = POLICY.evaluate(d)
+    assert action is Action.HUMAN_REVIEW
+    assert Reason.human_check("legal_threat") in reasons
+    assert Reason.human_check("manager_request") in reasons
+    assert Reason.human_check("fraud_or_takeover") not in reasons

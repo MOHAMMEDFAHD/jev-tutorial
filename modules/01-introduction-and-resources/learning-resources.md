@@ -38,7 +38,7 @@ documentation index, [`docs.typesafe.ai/llms.txt`](https://docs.typesafe.ai/llms
 | [Primitives](https://docs.typesafe.ai/primitives) | choosing Choice / Score / Noul | ✅ |
 | [Choice](https://docs.typesafe.ai/primitives/choice) | department question | ✅ |
 | [Score](https://docs.typesafe.ai/primitives/score) | priority question | ✅ |
-| [Noul](https://docs.typesafe.ai/primitives/noul) | needs-human question | ✅ |
+| [Noul](https://docs.typesafe.ai/primitives/noul) | the four human-review checks (legal threat, fraud, compensation, manager) | ✅ |
 | [Confidence](https://docs.typesafe.ai/confidence) | **the** page for Module 5; formulas used in `examples/03` and the slide-8 correction | ✅ |
 
 ## 3. Python & JavaScript SDKs (Modules 3–4, 8)
@@ -62,7 +62,7 @@ documentation index, [`docs.typesafe.ai/llms.txt`](https://docs.typesafe.ai/llms
 | [Intent routing](https://docs.typesafe.ai/patterns/intent-routing) | department → queue routing | ✅ |
 | [Confidence-gated routing](https://docs.typesafe.ai/patterns/confidence-routing) | `app/policies/automation_policy.py` | ✅ |
 | [Composite scoring](https://docs.typesafe.ai/patterns/composite-scoring) | ideas for Exercise 3 / final challenge | ✅ |
-| [Speculative fan-out](https://docs.typesafe.ai/patterns/fan-out) | why 3 questions share 1 request | ✅ |
+| [Speculative fan-out](https://docs.typesafe.ai/patterns/fan-out) | why all the questions share 1 request | ✅ |
 | [Example use cases](https://docs.typesafe.ai/concepts/use-case-map) | picking a final-challenge domain | ✅ |
 
 ## 5. Cookbooks (after the course)

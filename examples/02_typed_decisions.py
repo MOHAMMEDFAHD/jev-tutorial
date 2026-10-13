@@ -33,7 +33,11 @@ message = "Our Stripe integration has been failing for 3 days and we're losing s
 class TicketAnswers(SystemOneResponse):
     department: ChoiceAnswer  # Choice: pick one option      -> choice, probabilities, confidence
     priority: ScoreAnswer  # Score: rate on ordered levels -> score, probabilities, confidence
-    needs_human: NoulAnswer  # Noul: is this true?           -> noul (a probability, no confidence)
+    # Noul: is this true? -> noul (a probability of yes, no confidence). Four separate checks:
+    needs_human_legal_threat: NoulAnswer
+    needs_human_fraud_or_takeover: NoulAnswer
+    needs_human_compensation_request: NoulAnswer
+    needs_human_manager_request: NoulAnswer
 
 
 with TypeSafeClient(**client_kwargs(offline)) as client:
@@ -49,7 +53,11 @@ print(
     f"  priority   : score={response.priority.score}  probabilities={response.priority.probabilities}"
 )
 print(f"               legend={response.priority.legend}")
-print(f"  needs_human: noul={response.needs_human.noul}")
+print("  needs a person? (four Noul checks)")
+print(f"    legal threat         : noul={response.needs_human_legal_threat.noul}")
+print(f"    fraud or takeover    : noul={response.needs_human_fraud_or_takeover.noul}")
+print(f"    compensation request : noul={response.needs_human_compensation_request.noul}")
+print(f"    manager request      : noul={response.needs_human_manager_request.noul}")
 
 # --- B. Application typing: convert + validate into OUR schema. ---------------------------
 decision = parse_ticket_decision(response)
@@ -57,6 +65,7 @@ print("\nAPPLICATION DECISION (our enums, validated)")
 print(f"  department : {decision.department.department!r}")
 print(f"  priority   : {decision.priority.priority!r}  (most likely level)")
 print(f"  top-2 gap  : {decision.department.top2_margin:.2f}")
+print(f"  needs person: {decision.human_review.probability:.2f}  (highest of the four checks)")
 print(f"  model      : {decision.model}")
 
 # --- Failure case: a label we never defined must be rejected, not passed along. -----------

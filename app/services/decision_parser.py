@@ -25,7 +25,12 @@ from app.models.decision import (
     TicketDecision,
 )
 from app.services.jev_client import JevResponseError
-from app.services.questions import DEPARTMENT_KEY, HUMAN_REVIEW_KEY, PRIORITY_KEY
+from app.services.questions import (
+    DEPARTMENT_KEY,
+    HUMAN_REVIEW_CHECKS,
+    HUMAN_REVIEW_PREFIX,
+    PRIORITY_KEY,
+)
 
 PROBABILITY_SUM_TOLERANCE = 0.02  # API docs: probabilities "sum to approximately 1"
 
@@ -111,12 +116,20 @@ def _request_id(response: SystemOneResponse) -> str | None:
         return None
 
 
+def parse_human_review(response: SystemOneResponse) -> HumanReviewSignal:
+    """Validate each of the four yes/no checks; the overall probability is the highest one."""
+    checks = {}
+    for name in HUMAN_REVIEW_CHECKS:
+        key = HUMAN_REVIEW_PREFIX + name
+        checks[name] = _check_unit(_get(response, key, NoulAnswer).noul, f"{key}.noul")
+    return HumanReviewSignal(probability=max(checks.values()), checks=checks)
+
+
 def parse_ticket_decision(response: SystemOneResponse) -> TicketDecision:
-    noul = _get(response, HUMAN_REVIEW_KEY, NoulAnswer)
     return TicketDecision(
         department=parse_department(_get(response, DEPARTMENT_KEY, ChoiceAnswer)),
         priority=parse_priority(_get(response, PRIORITY_KEY, ScoreAnswer)),
-        human_review=HumanReviewSignal(probability=_check_unit(noul.noul, "needs_human.noul")),
+        human_review=parse_human_review(response),
         model=response.model,
         request_id=_request_id(response),
         input_tokens=response.usage.input_tokens,

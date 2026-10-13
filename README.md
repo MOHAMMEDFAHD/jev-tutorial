@@ -120,8 +120,8 @@ platform or your own service performs the action.
 ## What you'll build
 
 ```text
-POST /tickets ─► validate input ─► redact PII ─► Jev: 1 request, 3 questions in parallel
-                                                   department (Choice) · priority (Score) · needs human? (Noul)
+POST /tickets ─► validate input ─► redact PII ─► Jev: 1 request, all questions in parallel
+                                                   department (Choice) · priority (Score) · needs a person? (4 Noul checks)
                                                           │
                                   typed TicketDecision ◄──┴── validate every answer (reject unknown labels, bad numbers)
                                                           │
@@ -311,7 +311,7 @@ All settings are environment variables (see `.env.example`).
 | `AUTO_ROUTE_MIN_CONFIDENCE` | 0.60 | department confidence needed to auto-route |
 | `MIN_TOP2_MARGIN` | 0.15 | minimum gap between the two most likely departments |
 | `PRIORITY_MIN_CONFIDENCE` | 0.40 | below this the SLA can't be set reliably |
-| `HUMAN_REVIEW_NOUL_THRESHOLD` | 0.50 | P(needs human) at which we escalate |
+| `HUMAN_REVIEW_NOUL_THRESHOLD` | 0.50 | a person steps in when ANY of the four human-review checks reaches this |
 | `CRITICAL_ESCALATION_PROBABILITY` | 0.25 | P(critical) at which we escalate, even if it isn't the top level |
 | `MANDATORY_REVIEW_PRIORITIES` | `["critical"]` | always reviewed, whatever the confidence |
 | `MAX_MESSAGE_CHARS` · `REDACT_PII` · `DATABASE_URL` · `LOG_LEVEL` | 4000 · true · sqlite · INFO | limits, privacy, infrastructure |

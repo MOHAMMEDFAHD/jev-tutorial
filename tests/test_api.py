@@ -227,3 +227,12 @@ def test_openapi_documents_all_endpoints(api_client_factory):
         "/metrics",
         "/health",
     } <= set(paths)
+
+
+def test_reasons_name_the_human_check_that_fired(api_client_factory):
+    client = api_client_factory(
+        respond_with(**{**CONFIDENT_BILLING, "human_checks": {"legal_threat": 0.93}})
+    )
+    body = client.post("/tickets", json=TICKET).json()
+    assert body["action"] == "human_review"
+    assert body["reasons"] == ["needs_human:legal_threat"]

@@ -48,6 +48,13 @@ _KEYWORDS: dict[str, list[str]] = {
 _URGENT = ["asap", "urgent", "immediately", "blocked", "losing", "today", "cannot", "can't"]
 _CRITICAL = ["hacked", "breach", "data loss", "deleted all", "outage", "everyone", "all users"]
 _HUMAN = ["lawyer", "legal", "sue", "manager", "fraud", "compensation", "chargeback", "hacked"]
+# One keyword list per human-review check (question keys "needs_human_<name>").
+_HUMAN_CHECKS = {
+    "legal_threat": ["lawyer", "legal", "sue", "court", "regulator"],
+    "fraud_or_takeover": ["fraud", "hacked", "stolen", "takeover", "someone logged", "chargeback"],
+    "compensation_request": ["compensation", "damages", "lost business", "reimburse"],
+    "manager_request": ["manager", "supervisor"],
+}
 _SIM = re.compile(r"\[\[simulate:(\w+)\]\]")
 
 
@@ -103,17 +110,18 @@ def _priority_answer(text: str, legend: list) -> dict:
     }
 
 
-def _noul_answer(text: str) -> dict:
-    return {"type": "noul", "noul": 0.9 if _hits(text, _HUMAN) else 0.08}
+def _noul_answer(text: str, key: str = "") -> dict:
+    words = _HUMAN_CHECKS.get(key.removeprefix("needs_human_"), _HUMAN)
+    return {"type": "noul", "noul": 0.9 if _hits(text, words) else 0.08}
 
 
-def _answer(question: dict, text: str) -> dict:
+def _answer(question: dict, text: str, key: str = "") -> dict:
     kind = question.get("type")
     if kind == "choice":
         return _department_answer(text, list(question["criteria"]))
     if kind == "score":
         return _priority_answer(text, list(question["criteria"]))
-    return _noul_answer(text)
+    return _noul_answer(text, key)
 
 
 def handle_request(request: httpx2.Request) -> httpx2.Response:
@@ -154,7 +162,7 @@ def handle_request(request: httpx2.Request) -> httpx2.Response:
                 },
             )
 
-    answers = {key: _answer(q, text) for key, q in body["questions"].items()}
+    answers = {key: _answer(q, text, key) for key, q in body["questions"].items()}
     return httpx2.Response(
         200,
         headers=headers,

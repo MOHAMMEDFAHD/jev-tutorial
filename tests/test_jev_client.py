@@ -38,7 +38,10 @@ async def test_sends_documented_request_shape():
     assert {k: q["type"] for k, q in body["questions"].items()} == {
         "department": "choice",
         "priority": "score",
-        "needs_human": "noul",
+        "needs_human_legal_threat": "noul",
+        "needs_human_fraud_or_takeover": "noul",
+        "needs_human_compensation_request": "noul",
+        "needs_human_manager_request": "noul",
     }
     assert set(body["questions"]["department"]["criteria"]) == {d.value for d in Department}
     assert len(body["questions"]["priority"]["criteria"]) == 4
@@ -86,7 +89,11 @@ async def test_connection_failure_maps_to_unavailable():
 
 
 async def test_structurally_malformed_response_is_rejected_by_sdk():
-    body = {"model": "jev-1.13.0", "usage": {}, "answers": {"needs_human": {"type": "noul"}}}
+    body = {
+        "model": "jev-1.13.0",
+        "usage": {},
+        "answers": {"needs_human_legal_threat": {"type": "noul"}},
+    }
     with pytest.raises(JevResponseError):
         await jev_with(respond_with(body)).evaluate_ticket("x")
 

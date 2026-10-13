@@ -25,11 +25,15 @@ from app.models.decision import Action, Priority, TicketDecision
 class Reason:
     MANDATORY_PRIORITY = "mandatory_review_priority"
     CRITICAL_RISK = "critical_probability_above_limit"
-    HUMAN_REQUESTED = "model_flagged_human_needed"
+    HUMAN_REQUESTED = "needs_human"  # prefix: one reason per check, e.g. "needs_human:legal_threat"
     LOW_DEPARTMENT_CONFIDENCE = "low_department_confidence"
     AMBIGUOUS_DEPARTMENT = "ambiguous_department_top2"
     LOW_PRIORITY_CONFIDENCE = "low_priority_confidence"
     ALL_CHECKS_PASSED = "all_checks_passed"
+
+    @staticmethod
+    def human_check(name: str) -> str:
+        return f"{Reason.HUMAN_REQUESTED}:{name}"
 
 
 @dataclass(frozen=True)
@@ -66,9 +70,12 @@ class AutomationPolicy:
             # security incident is worth a human's attention even if "high" won.
             reasons.append(Reason.CRITICAL_RISK)
 
-        # 2. The model's own yes/no judgment that a human is needed (Noul probability).
-        if decision.human_review.probability >= self.human_review_noul_threshold:
-            reasons.append(Reason.HUMAN_REQUESTED)
+        # 2. The model's yes/no checks (Nouls) that a person is needed: legal threat, fraud...
+        # Each check is judged separately; ANY likely one is enough ("any serious condition").
+        checks = decision.human_review.checks or {"unspecified": decision.human_review.probability}
+        for name, probability in checks.items():
+            if probability >= self.human_review_noul_threshold:
+                reasons.append(Reason.human_check(name))
 
         # 3. Uncertainty gates: the model isn't sure enough for us to act.
         if dept.confidence < self.auto_route_min_confidence:

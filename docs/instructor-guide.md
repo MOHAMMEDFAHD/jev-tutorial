@@ -111,7 +111,7 @@ the slides and the reading list.
 6. Jev's limits (jaggedness page): literal reading, numbers/dates, option-order bias, prompt-injected
    state, no text generation. "Keep arithmetic and policy in code."
 
-**Show** `app/services/questions.py` — read the three questions aloud. Don't explain the code yet.
+**Show** `app/services/questions.py` — read the three decisions aloud (human review is four small yes/no checks). Don't explain the code yet.
 
 **Mistakes to highlight.** Treating Jev like a chat model ("explain why…"), asking it to count or
 compare dates, cramming several judgments into one question.
@@ -159,7 +159,7 @@ Then set a garbage key and show the 401 branch. Point out the `except` order: sp
 ## Module 4 — Classification with Jev (20:00–30:00)
 
 **Explain.** Turn the toy request into the real decision problem: department (Choice, 5 options),
-priority (Score, 4 ordered levels), needs-human (Noul).
+priority (Score, 4 ordered levels), human review (four Nouls: legal threat, fraud or takeover, compensation, manager request; our code says "any likely check → a person").
 
 **Write** in `app/services/questions.py`: the `DEPARTMENT_CRITERIA` dict and the `build_ticket_questions()`
 function. Stress *literal* criteria: "refunds" under billing, "cancelling" under account — boundary
@@ -177,7 +177,7 @@ should never import SDK error classes; and the SDK already retries 429/5xx with 
 **Failure case.** Mention option-order bias (jev-1.13): a homework idea is to shuffle criteria order
 and check whether answers stay the same.
 
-**Checkpoint.** Learners can explain why all three questions go in one request.
+**Checkpoint.** Learners can explain why all the questions go in one request, and why one Noul per condition beats one combined question.
 
 ---
 

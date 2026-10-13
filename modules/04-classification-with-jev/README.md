@@ -11,11 +11,11 @@ predicts; our code routes (Module 6). Slide 26's priority has ordered levels, so
 ## Build
 
 1. **The questions** — [`app/services/questions.py`](../../app/services/questions.py):
-   department (**Choice**, 5 options), priority (**Score**, 4 ordered levels), needs-human (**Noul**).
+   department (**Choice**, 5 options), priority (**Score**, 4 ordered levels), human review (**four Nouls**: legal threat, fraud or takeover, compensation, manager request).
    Write criteria literally, including boundary cases ("refunds" under billing, "cancelling" under
    account): Jev answers the question you wrote, not the one you meant.
 2. **The client** — [`app/services/jev_client.py`](../../app/services/jev_client.py):
-   `evaluate_ticket()` sends **one** request with all three questions, then maps SDK exceptions to
+   `evaluate_ticket()` sends **one** request with all the questions (three decisions), then maps SDK exceptions to
    app errors (`JevAuthError`, `JevRateLimitError`, `JevTimeoutError`, …) so the rest of the app
    never imports SDK error classes. Retries: the SDK already retries 429/5xx/timeouts with backoff,
    so we **configure** `RetryPolicy` instead of writing a loop.
@@ -43,6 +43,6 @@ Option order can bias jev-1.13 toward the first Choice option — try shuffling 
 
 ## ✅ Checkpoint
 
-You can explain why all three questions go in one request, and why the app has its own error types.
+You can explain why all the questions go in one request, and why human review is four small checks instead of one, and why the app has its own error types.
 
 Next ➡ [Module 5 — Probabilities & Validation](../05-probabilities-and-validation/README.md)
