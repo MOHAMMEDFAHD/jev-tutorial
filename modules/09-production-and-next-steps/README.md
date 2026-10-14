@@ -29,7 +29,7 @@ invoice amount limit are computed **in Python**, and Jev gets the results as nam
 
 ```bash
 docker build -t practical-jev-ai .
-docker run --rm -p 8000:8000 --env-file .env -v jevdata:/data practical-jev-ai
+docker run --rm -p 8000:8000 --env-file .env -e DATABASE_URL=sqlite:////data/tickets.db -v jevdata:/data practical-jev-ai
 ```
 
 **Before real traffic**, read [docs/production-checklist.md](../../docs/production-checklist.md): authentication,

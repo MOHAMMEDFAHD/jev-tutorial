@@ -25,7 +25,7 @@ Calling `POST /tickets` keeps one tested source of truth for the policy.
 ## Setup
 
 1. Run the service where n8n can reach it (same Docker network or private host):
-   `docker run --rm -p 8000:8000 --env-file .env -v jevdata:/data practical-jev-ai`
+   `docker run --rm -p 8000:8000 --env-file .env -e DATABASE_URL=sqlite:////data/tickets.db -v jevdata:/data practical-jev-ai`
 2. **Do not expose it publicly as-is** — the API has no authentication yet (see
    [production-checklist.md](production-checklist.md)). Put it behind a gateway with an API key
    before any internet exposure.

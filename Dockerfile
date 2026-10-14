@@ -1,6 +1,7 @@
 # Production-style image for the Jev support decision engine.
 # Build:  docker build -t practical-jev-ai .
-# Run:    docker run --rm -p 8000:8000 --env-file .env -v jevdata:/data practical-jev-ai
+# Run:    docker run --rm -p 8000:8000 --env-file .env -e DATABASE_URL=sqlite:////data/tickets.db -v jevdata:/data practical-jev-ai
+#         (-e is needed: the .env DATABASE_URL is a local path the non-root user cannot write)
 FROM python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -10,7 +11,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Dependencies first so this layer is cached when only source code changes.
+# Install the project and its dependencies.
 COPY pyproject.toml README.md ./
 COPY app ./app
 RUN pip install --upgrade pip && pip install .
