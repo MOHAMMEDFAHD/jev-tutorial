@@ -1,5 +1,7 @@
 # Practical Jev AI Engineering
 
+[![CI](https://github.com/MOHAMMEDFAHD/jev-tutorial/actions/workflows/ci.yml/badge.svg)](https://github.com/MOHAMMEDFAHD/jev-tutorial/actions/workflows/ci.yml)
+
 **Build production-ready decision systems with Python: from typed probabilistic decisions to real-world AI automation.**
 
 A hands-on course and companion repository. You build an **intelligent customer-support decision engine**:
@@ -9,7 +11,7 @@ automatically or held for a person.
 
 > **The one idea this course teaches:** *Jev makes the judgment. Your code decides what to do with it.*
 
-**Verified live** against `jev-1.13.0` with `typesafe-sdk` 0.7.4 · **103 automated tests** · FastAPI · SQLite · Docker · a browser playground
+**Verified live** against `jev-1.13.0` with `typesafe-sdk` 0.7.4 · **103 automated tests**, run by CI on every push · FastAPI · SQLite · Docker · a browser playground
 
 ---
 
@@ -25,6 +27,7 @@ automatically or held for a person.
 [Playground](#try-it-in-your-browser-playground) ·
 [API](#run-the-api) ·
 [Tests](#run-the-tests) ·
+[CI](#continuous-integration) ·
 [Evaluation](#evaluate-decision-quality) ·
 [Docker](#docker) ·
 [Configuration](#configuration) ·
@@ -192,6 +195,7 @@ evaluation/                     40 labelled synthetic tickets, metrics, evaluate
 modules/01–09/                  the course, one folder per module (Module 1 holds the slides & resources)
 docs/                           command reference (PDF), outline, guides, slide companion, checklist
 Dockerfile                      production-style container (non-root, health check)
+.github/workflows/ci.yml        CI: code style + tests on every push (Linux & Windows, Python 3.11–3.13)
 ```
 
 ## Quick start
@@ -332,6 +336,22 @@ RUN_LIVE_TESTS=1 pytest -m live -s               # Git Bash / macOS / Linux
 ```
 Expected: `LIVE: jev-1.13.0 -> billing (1.00), high, auto_route, … ms` and `1 passed`.
 
+## Continuous integration
+
+Every push to `main` and every pull request runs [`.github/workflows/ci.yml`](.github/workflows/ci.yml) on
+GitHub Actions: install, `ruff` (format + lint) and `pytest`, on Ubuntu with Python 3.11, 3.12 and 3.13,
+and on Windows with Python 3.13. It needs **no API key**: the tests mock the network and the live test
+skips itself. Never add your TypeSafe key to GitHub.
+
+Results are in the repository's **Actions** tab and in the badge at the top of this page. Run the same
+checks locally before pushing:
+
+```bash
+ruff format --check . && ruff check . && pytest -q
+```
+
+Details, how to read a failed run, and common fixes: [docs/ci.md](docs/ci.md).
+
 ## Evaluate decision quality
 
 ```bash
@@ -429,6 +449,7 @@ for downstream actions, alerting, and thresholds tuned on your own labelled data
 | [docs/slide-companion.md](docs/slide-companion.md) | how to use `jev-slides.pdf`: slide → module, and the verbal corrections |
 | [docs/student-guide.md](docs/student-guide.md) | self-paced labs, three exercises, final challenge |
 | [docs/architecture.md](docs/architecture.md) | design and data flow |
+| [docs/ci.md](docs/ci.md) | the CI workflow: what runs, reading results, common fixes |
 | [docs/n8n-integration.md](docs/n8n-integration.md) | calling this service from n8n |
 | [modules/01-introduction-and-resources/learning-resources.md](modules/01-introduction-and-resources/learning-resources.md) | all 48 resource links, verified and mapped to modules |
 | [docs/production-checklist.md](docs/production-checklist.md) | what's done and what isn't |

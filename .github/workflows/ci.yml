@@ -1,0 +1,54 @@
+# Continuous integration: on every push to main and every pull request, check the code
+# style and run the full offline test suite. No API key or secret is needed (or wanted):
+# the tests mock the network, and the live test skips itself without RUN_LIVE_TESTS.
+# Guide: docs/ci.md
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch: # also allows a manual run from the Actions tab
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Tests (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, python: "3.11" }
+          - { os: ubuntu-latest, python: "3.12" }
+          - { os: ubuntu-latest, python: "3.13" }
+          - { os: windows-latest, python: "3.13" } # most learners use Windows
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+
+      - name: Install the project
+        run: pip install -e ".[dev,ui]"
+
+      - name: Code style (ruff)
+        run: |
+          ruff format --check .
+          ruff check .
+
+      - name: Tests (offline, no API key)
+        run: pytest -q

@@ -69,7 +69,7 @@ Legend: ✅ implemented and tested · ◐ partially implemented · ❌ not imple
 | Metrics | ◐ | JSON `/metrics` computed from the DB; export to Prometheus/OpenTelemetry for real monitoring |
 | Structured logs with request ids | ✅ | `X-Request-ID` + TypeSafe `jev_request_id` for support tickets |
 | Alerting | ❌ | alert on error rate, review-rate spikes, p95 latency |
-| CI pipeline | ❌ | run `ruff` + `pytest` on every push |
+| CI pipeline | ✅ | [`.github/workflows/ci.yml`](../.github/workflows/ci.yml): `ruff` + `pytest` on every push and pull request (Linux & Windows, Python 3.11–3.13); see [ci.md](ci.md) |
 | Documentation accuracy vs. slide deck | ✅ | five deck simplifications corrected in `docs/slide-companion.md`, each pinned by `tests/test_slide_claims.py` |
 | External learning links | ◐ | 41/42 official links matched the official index on 2026-10-11; `cookbooks/basic_memory` not found; 6 third-party links (typesafeai.org) unverified. Re-check periodically |
 | Load test | ❌ | not performed |
